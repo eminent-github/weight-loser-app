@@ -1,0 +1,72 @@
+// import 'dart:async';
+
+// import 'package:flutter/material.dart';
+// import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+// import 'package:weight_loss_app/common/app_colors.dart';
+// import 'package:weight_loss_app/common/app_text_styles.dart';
+
+// class ConnectedDeviceTile extends StatefulWidget {
+//   final BluetoothDevice device;
+//   final VoidCallback onOpen;
+//   final VoidCallback onConnect;
+
+//   const ConnectedDeviceTile({
+//     required this.device,
+//     required this.onOpen,
+//     required this.onConnect,
+//     super.key,
+//   });
+
+//   @override
+//   State<ConnectedDeviceTile> createState() => _ConnectedDeviceTileState();
+// }
+
+// class _ConnectedDeviceTileState extends State<ConnectedDeviceTile> {
+//   BluetoothConnectionState _connectionState =
+//       BluetoothConnectionState.disconnected;
+
+//   late StreamSubscription<BluetoothConnectionState>
+//       _connectionStateSubscription;
+
+//   @override
+//   void initState() {
+//     super.initState();
+
+//     _connectionStateSubscription =
+//         widget.device.connectionState.listen((state) {
+//       _connectionState = state;
+//       setState(() {});
+//     });
+//   }
+
+//   @override
+//   void dispose() {
+//     _connectionStateSubscription.cancel();
+//     super.dispose();
+//   }
+
+//   bool get isConnected {
+//     return _connectionState == BluetoothConnectionState.connected;
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListTile(
+//       title: Text(widget.device.platformName),
+//       subtitle: Text(widget.device.remoteId.toString()),
+//       trailing: ElevatedButton(
+//         onPressed: isConnected ? widget.onOpen : widget.onConnect,
+//         style: ElevatedButton.styleFrom(
+//           backgroundColor: AppColors.buttonColor,
+//         ),
+//         child: isConnected
+//             ? Text(
+//                 'OPEN',
+//                 style: AppTextStyles.formalTextStyle(color: AppColors.white),
+//               )
+//             : Text('CONNECT',
+//                 style: AppTextStyles.formalTextStyle(color: AppColors.white)),
+//       ),
+//     );
+//   }
+// }
