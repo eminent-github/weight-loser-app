@@ -159,53 +159,28 @@ class RegularPriceController extends GetxController {
     }
   }
 
-  ///
-  ///
-  ///
-  // Future<void> makePayment() async {
-  //   try {
-  //     //STEP 1: Create Payment Intent
-  //     paymentIntent = await createPaymentIntent('100', 'USD');
+  String getCustomOfferNameByPrice({required String price}) {
+    if (price == "\$0.99") {
+      return "\$0.99";
+    }
 
-  //     //STEP 2: Initialize Payment Sheet
-  //     await Stripe.instance
-  //         .initPaymentSheet(
-  //             paymentSheetParameters: SetupPaymentSheetParameters(
-  //                 paymentIntentClientSecret: paymentIntent![
-  //                     'client_secret'], //Gotten from payment intent
-  //                 style: ThemeMode.light,
-  //                 merchantDisplayName: 'Ikay'))
-  //         .then((value) {});
+    ///
+    else if (price == "\$2.99") {
+      return "\$2.99";
+    }
 
-  //     //STEP 3: Display Payment sheet
-  //     displayPaymentSheet();
-  //   } catch (err) {
-  //     throw Exception(err);
-  //   }
-  // }
-  ///
-  ///
-  ///
-  // void createPaymentIntent(String amount, String currency) async {
-  //   try {
-  //     //Request body
-  //     Map<String, dynamic> body = {
-  //       'amount': calculateAmount(amount),
-  //       'currency': currency,
-  //     };
+    ///
+    else if (price == "\$4.99") {
+      return "\$4.99";
+    }
 
-  //     //Make post request to Stripe
-  //     var response = await http.post(
-  //       Uri.parse('https://api.stripe.com/v1/payment_intents'),
-  //       headers: {
-  //         'Authorization': 'Bearer ${dotenv.env['STRIPE_SECRET']}',
-  //         'Content-Type': 'application/x-www-form-urlencoded'
-  //       },
-  //       body: body,
-  //     );
-  //     return json.decode(response.body);
-  //   } catch (err) {
-  //     throw Exception(err.toString());
-  //   }
-  // }
+    ///
+    else if (price == "\$6.99") {
+      return "\$6.99";
+    } else {
+      return "";
+    }
+
+    ///
+  }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:weight_loss_app/common/app_assets.dart';
 import 'package:weight_loss_app/common/app_colors.dart';
 import 'package:weight_loss_app/common/app_text_styles.dart';
@@ -540,7 +540,6 @@ class _RegularPricePageState extends State<RegularPricePage> {
                     if (controller.isShowTrial.value)
                       Column(
                         children: [
-                          SizedBox(height: height * 0.01),
                           Text(
                             'Choose a price for your weekly trial',
                             style: AppTextStyles.formalTextStyle(
@@ -550,189 +549,72 @@ class _RegularPricePageState extends State<RegularPricePage> {
                           ),
 
                           ///
-
-                          // Wrap(
-                          //   children: controller.trialPrices
-                          //       .asMap()
-                          //       .entries
-                          //       .map(
-                          //         (entry) => Padding(
-                          //           padding: const EdgeInsets.all(8.0),
-                          //           child: GestureDetector(
-                          //             onTap: () async {
-                          //               // print("Tapped index: ${entry.key}");
-                          //               // print(
-                          //               //     "Tapped index value : ${entry.value}");
-
-                          //               await controller.selectedPurchase(
-                          //                 value: entry.value,
-                          //               );
-
-                          //               print(
-                          //                   "selectedConsumableProduct: ${controller.selectedConsumableProduct.value}");
-
-                          //               // regularPriceController.isLoading.value =
-                          //               //     true;
-
-                          //               /// wl_trail_0.99
-                          //               /// wl_trail_2.99
-                          //               ///wl_trial_4.99
-                          //               ///wl_trial_6.99
-                          //               ///
-
-                          //               await InAppPurchaseUtils.instance
-                          //                   .restorePurchases();
-
-                          //               ///
-                          //               ///
-                          //               controller.isLoading.value = true;
-                          //               controller.isLoading.value = false;
-                          //             },
-                          //             child: SizedBox(
-                          //               width: width * 0.15,
-                          //               height: height * 0.06,
-                          //               child: Material(
-                          //                 color: AppColors.buttonColor,
-                          //                 borderRadius: BorderRadius.circular(6),
-                          //                 child: Padding(
-                          //                   padding: const EdgeInsets.all(8.0),
-                          //                   child: Center(
-                          //                     child: Text(
-                          //                       "\$${entry.value.toString()}",
-                          //                       style:
-                          //                           AppTextStyles.formalTextStyle(
-                          //                         color: AppColors.white,
-                          //                         fontWeight: FontWeight.bold,
-                          //                       ),
-                          //                     ),
-                          //                   ),
-                          //                 ),
-                          //               ),
-                          //             ),
-                          //           ),
-                          //         ),
-                          //       )
-                          //       .toList(),
-                          // ),
-
                           ///
                           ///
                           ///
-                          ///
-                          // Wrap(
-                          //   children: purchaseApiController.packages
-                          //       .asMap()
-                          //       .entries
-                          //       .map(
-                          //         (entry) => Padding(
-                          //           padding: const EdgeInsets.all(8.0),
-                          //           child: GestureDetector(
-                          //             onTap: () async {
-                          //               ///
-                          //               ///
-                          //               ///
-                          //               ///
-                          //             },
-                          //             child: SizedBox(
-                          //               width: width * 0.15,
-                          //               height: height * 0.06,
-                          //               child: Material(
-                          //                 color: AppColors.buttonColor,
-                          //                 borderRadius: BorderRadius.circular(6),
-                          //                 child: Padding(
-                          //                   padding: const EdgeInsets.all(8.0),
-                          //                   child: Center(
-                          //                     child: Text(
-                          //                       "\$${entry.value.toString()}",
-                          //                       style:
-                          //                           AppTextStyles.formalTextStyle(
-                          //                         color: AppColors.white,
-                          //                         fontWeight: FontWeight.bold,
-                          //                       ),
-                          //                     ),
-                          //                   ),
-                          //                 ),
-                          //               ),
-                          //             ),
-                          //           ),
-                          //         ),
-                          //       )
-                          //       .toList(),
-                          // ),
+                          Wrap(
+                            children:
+                                purchaseApiController.packages.map((package) {
+                              log("purchaseApiController.packages === ${purchaseApiController.packages}");
+                              log("price === ${package.storeProduct.priceString}");
 
-                          ///
-                          ///
-                          ///
-                          ///
-                          ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            padding: EdgeInsets.zero,
-                            itemCount: purchaseApiController.packages.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              Package package =
-                                  purchaseApiController.packages[index];
-                              print(
-                                  "purchaseApiController.packages === ${purchaseApiController.packages}");
+                              if (package.packageType.name != "custom") {
+                                return const SizedBox.shrink();
+                              }
 
                               return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 2),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(
-                                        color: Colors.black,
-                                      ),
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: ListTile(
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 1),
-                                      title: Text(
-                                        package.packageType.name,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
+                                padding: const EdgeInsets.all(8.0),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    purchaseApiController.isLoading.value =
+                                        true;
+
+                                    print(
+                                        "price === ${package.storeProduct.priceString}");
+
+                                    await PurchaseApiController.purchasePackage(
+                                      package,
+                                    );
+                                    await purchaseApiController.init();
+
+                                    purchaseApiController.isLoading.value =
+                                        false;
+                                  },
+                                  child: SizedBox(
+                                    width: width * 0.19,
+                                    height: height * 0.09,
+                                    child: Material(
+                                      color: AppColors.buttonColor,
+                                      borderRadius: BorderRadius.circular(6),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Text(
+                                            controller
+                                                .getCustomOfferNameByPrice(
+                                              price: package
+                                                  .storeProduct.priceString,
+                                            ),
+                                            style:
+                                                AppTextStyles.formalTextStyle(
+                                              color: AppColors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      subtitle: Text(
-                                        package.storeProduct.description,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      trailing: Text(
-                                        package.storeProduct.priceString,
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      onTap: () async {
-                                        purchaseApiController.isLoading.value =
-                                            true;
-
-                                        print(
-                                            "name === ${package.packageType.name}");
-                                        print(
-                                            "description === ${package.storeProduct.description}");
-                                        print(
-                                            "price === ${package.storeProduct.priceString}");
-
-                                        await PurchaseApiController
-                                            .purchasePackage(
-                                          purchaseApiController.packages[index],
-                                        );
-                                        await purchaseApiController.init();
-
-                                        purchaseApiController.isLoading.value =
-                                            false;
-                                      }),
+                                    ),
+                                  ),
                                 ),
                               );
-                            },
+                            }).toList(),
                           ),
+
+                          SizedBox(height: height * 0.05),
+
+                          ///
+                          ///
+                          ///
                         ],
                       ),
 
