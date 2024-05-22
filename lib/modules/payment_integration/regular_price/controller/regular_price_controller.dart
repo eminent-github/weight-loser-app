@@ -125,62 +125,17 @@ class RegularPriceController extends GetxController {
     }
   }
 
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  Future<void> selectedPurchase({required String value}) async {
-    /// wl_trail_0.99
-    /// wl_trail_2.99
-    ///wl_trial_4.99
-    ///wl_trial_6.99
-    switch (value) {
-      case '0.99':
-        // selectedConsumableProduct.value = "wl_program_90";
-        selectedConsumableProduct.value = "wl_trail_0.99";
-        print('Value is 0.99');
-        break;
-      case '2.99':
-        selectedConsumableProduct.value = "wl_trail_2.99";
-        print('Value is 2.00');
-        break;
-      case '4.99':
-        selectedConsumableProduct.value = "wl_trial_4.99";
-        print('Value is 4.99');
-        break;
-      case '6.99':
-        selectedConsumableProduct.value = "wl_trial_6.99";
-        print('Value is 6.99');
-        break;
-      default:
-        print('Value is unknown');
-    }
-  }
-
   String getCustomOfferNameByPrice({required String price}) {
     if (price == "\$0.99") {
       return "\$0.99";
-    }
-
-    ///
-    else if (price == "\$2.99") {
+    } else if (price == "\$2.99") {
       return "\$2.99";
-    }
-
-    ///
-    else if (price == "\$4.99") {
+    } else if (price == "\$4.99") {
       return "\$4.99";
-    }
-
-    ///
-    else if (price == "\$6.99") {
+    } else if (price == "\$6.99") {
       return "\$6.99";
     } else {
       return "";
     }
-
-    ///
   }
 }

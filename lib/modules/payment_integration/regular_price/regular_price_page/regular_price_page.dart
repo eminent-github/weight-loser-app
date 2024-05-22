@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -555,8 +554,8 @@ class _RegularPricePageState extends State<RegularPricePage> {
                           Wrap(
                             children:
                                 purchaseApiController.packages.map((package) {
-                              log("purchaseApiController.packages === ${purchaseApiController.packages}");
-                              log("price === ${package.storeProduct.priceString}");
+                              // log("purchaseApiController.packages === ${purchaseApiController.packages}");
+                              // log("price === ${package.storeProduct.priceString}");
 
                               if (package.packageType.name != "custom") {
                                 return const SizedBox.shrink();
@@ -576,7 +575,6 @@ class _RegularPricePageState extends State<RegularPricePage> {
                                       package,
                                     );
                                     await purchaseApiController.init();
-
                                     purchaseApiController.isLoading.value =
                                         false;
                                   },
