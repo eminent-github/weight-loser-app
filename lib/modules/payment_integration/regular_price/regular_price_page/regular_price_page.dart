@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -14,27 +15,17 @@ import 'package:weight_loss_app/modules/payment_integration/regular_price/contro
 import 'package:weight_loss_app/modules/registeration_questions/widgets/qus_next_button.dart';
 import 'package:weight_loss_app/utils/in_app_purchase_util.dart';
 
-class RegularPricePage extends GetView<RegularPriceController> {
-  RegularPricePage({
-    super.key,
-    required this.isLogin,
-  });
+class RegularPricePage extends StatefulWidget {
+  const RegularPricePage({super.key, required this.isLogin});
   final bool isLogin;
 
-  ///
-  ///
-  ///
-
-  final ScrollController scrollController = ScrollController();
   @override
-  final RegularPriceController regularPriceController = Get.find();
-  void scrollToBottom() {
-    scrollController.animateTo(
-      scrollController.position.maxScrollExtent,
-      duration: const Duration(seconds: 2),
-      curve: Curves.easeInOut,
-    );
-  }
+  State<RegularPricePage> createState() => _RegularPricePageState();
+}
+
+class _RegularPricePageState extends State<RegularPricePage> {
+  final ScrollController scrollController = ScrollController();
+  final RegularPriceController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -565,10 +556,10 @@ class RegularPricePage extends GetView<RegularPriceController> {
                                     ///
 
                                     await InAppPurchaseUtils.instance
-                                        .buyConsumableProduct(controller
-                                            .selectedConsumableProduct.value);
-                                    // await InAppPurchaseUtils.instance
-                                    //     .restorePurchases();
+                                        .restorePurchases();
+
+                                    ///
+                                    ///
                                     controller.isLoading.value = true;
                                     controller.isLoading.value = false;
                                   },
