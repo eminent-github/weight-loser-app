@@ -571,10 +571,11 @@ class _RegularPricePageState extends State<RegularPricePage> {
                                     print(
                                         "price === ${package.storeProduct.priceString}");
 
-                                    await PurchaseApiController.purchasePackage(
-                                      package,
-                                    );
-                                    await purchaseApiController.init();
+                                    await purchaseApiController
+                                        .purchasePackage(package);
+
+                                    ///
+
                                     purchaseApiController.isLoading.value =
                                         false;
                                   },

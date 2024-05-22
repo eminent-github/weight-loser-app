@@ -160,15 +160,15 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     purchaseApiController.init();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (purchaseApiController.isWeeklyPurchased.value) {
-        log("user is premium with weekly plan");
-      } else if (purchaseApiController.isOtherPurchased.value) {
-        log("user is premium with other plan");
-      } else {
-        log("user is not premium");
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (purchaseApiController.isWeeklyPurchased.value) {
+    //     log("user is premium with weekly plan");
+    //   } else if (purchaseApiController.isOtherPurchased.value) {
+    //     log("user is premium with other plan");
+    //   } else {
+    //     log("user is not premium");
+    //   }
+    // });
     super.initState();
   }
 

@@ -121,6 +121,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:weight_loss_app/modules/talking_oath/talking_outh/binding/talking_oath_binding.dart';
+import 'package:weight_loss_app/modules/talking_oath/talking_outh/view/talking_oath_page.dart';
 
 class PurchaseApiController extends GetxController {
   RxBool isLoading = true.obs;
@@ -159,12 +161,69 @@ class PurchaseApiController extends GetxController {
     }
   }
 
-  static Future<bool> purchasePackage(Package package) async {
+  // Future<bool> purchasePackage(Package package) async {
+  //   try {
+  //     await Purchases.purchasePackage(package);
+  //     await init();
+
+  //     if (isWeeklyPurchased.value || isOtherPurchased.value) {
+  //       log("user is premium");
+  //     } else {
+  //       log("user is not premium");
+  //     }
+
+  //     // Get.offAll(() => const TalkingOathPage(), binding: TalkingOathBinding());
+  //     return true;
+  //   } catch (e) {
+  //     log('Purchase failed: $e');
+  //     return false;
+  //   }
+  // }
+
+  Future<bool> purchasePackage(Package package) async {
     try {
       await Purchases.purchasePackage(package);
+      await init();
+      await updatePurchaseStatus();
+
+      if (isWeeklyPurchased.value || isOtherPurchased.value) {
+        log("User is premium");
+        // Navigate to TalkingOathPage after successful purchase and status update
+        Get.offAll(() => const TalkingOathPage(),
+            binding: TalkingOathBinding());
+      } else {
+        log("User is not premium");
+      }
+
       return true;
     } catch (e) {
-      log('Purchase failed: $e');
+      if (e is PlatformException) {
+        log('Purchase failed: ${e.message}, code: ${e.code}, details: ${e.details}');
+
+        ScaffoldMessenger.of(Get.context!).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Purchase failed: ${e.message}. Please try again later.',
+              style: const TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+
+        switch (e.code) {
+          case '2':
+            log('There is a problem with the App Store. Please try again later.');
+            break;
+          case '1':
+            log('User canceled the purchase.');
+            break;
+          default:
+            log('An unknown error occurred: ${e.message}');
+        }
+      } else {
+        log('An unexpected error occurred: $e');
+      }
+
       return false;
     }
   }
