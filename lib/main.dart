@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
@@ -11,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weight_loss_app/common/app_colors.dart';
 import 'package:weight_loss_app/common/notification_service.dart';
+import 'package:weight_loss_app/controllers/purchase_api_controller.dart';
 import 'package:weight_loss_app/local_db/notification_db.dart';
 import 'package:weight_loss_app/modules/setting/notifications/model/notification_model.dart';
 import 'package:weight_loss_app/theming/app_theme.dart';
@@ -133,19 +135,39 @@ TimeOfDay parseTimeFromString(String timeString) {
 //   }
 // }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key, required this.selectedThemeIndex});
   final int selectedThemeIndex;
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   ThemeMode selectedTheme() {
-    if (selectedThemeIndex == 0) {
+    if (widget.selectedThemeIndex == 0) {
       return ThemeMode.light;
-    } else if (selectedThemeIndex == 1) {
+    } else if (widget.selectedThemeIndex == 1) {
       return ThemeMode.dark;
-    } else if (selectedThemeIndex == 2) {
+    } else if (widget.selectedThemeIndex == 2) {
       return ThemeMode.system;
     }
     return ThemeMode.system;
+  }
+
+  var purchaseApiController = Get.put(PurchaseApiController(), permanent: true);
+
+  @override
+  void initState() {
+    purchaseApiController.init();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (purchaseApiController.isPurchased.value) {
+        log("user is premium");
+      } else {
+        log("user is not premium");
+      }
+    });
+    super.initState();
   }
 
   @override
