@@ -14,6 +14,7 @@ import 'package:weight_loss_app/modules/payment_integration/monthly_plan/binding
 import 'package:weight_loss_app/modules/payment_integration/monthly_plan/monthly_plan_page/monthly_plan_page.dart';
 import 'package:weight_loss_app/modules/payment_integration/regular_price/controller/regular_price_controller.dart';
 import 'package:weight_loss_app/modules/registeration_questions/widgets/qus_next_button.dart';
+import 'package:weight_loss_app/widgets/custom_snackbar.dart';
 
 class RegularPricePage extends StatefulWidget {
   const RegularPricePage({super.key, required this.isLogin});
@@ -275,14 +276,16 @@ class _RegularPricePageState extends State<RegularPricePage> {
                                   height: height * 0.07,
                                   width: width * 0.5,
                                   callBack: () async {
+                                    print("isMonthly == false");
+
                                     Get.to(
                                       () => MonthlyPlanPage(
                                         monthlyPackage: controller
                                             .planAccordingTOMonths()
                                             .$1,
-                                        productId: controller
-                                            .planAccordingTOMonths()
-                                            .$2,
+                                        // productId: controller
+                                        //     .planAccordingTOMonths()
+                                        //     .$2,
                                         isMonthly: false,
                                       ),
                                       binding: MonthlyPlanBinding(
@@ -315,12 +318,13 @@ class _RegularPricePageState extends State<RegularPricePage> {
                               borderRadius: BorderRadius.circular(6),
                               child: InkWell(
                                 onTap: () {
+                                  print("isMonthly == true");
                                   Get.to(
                                     () => MonthlyPlanPage(
                                       monthlyPackage: controller.getPaymentPlans
                                           .singleWhere(
                                               (element) => element.id == 1),
-                                      productId: "wl_monthly_plan",
+                                      // productId: "wl_monthly_plan",
                                       isMonthly: true,
                                     ),
                                     binding: MonthlyPlanBinding(
@@ -523,16 +527,26 @@ class _RegularPricePageState extends State<RegularPricePage> {
                     ///
                     TextButton(
                       onPressed: () async {
+                        purchaseApiController.isLoading.value = true;
                         double discountPrice = controller
                                 .planAccordingTOMonths()
                                 .$1
                                 .discountPrice ??
                             0;
+
+                        ///
+                        ///
+                        double price =
+                            controller.planAccordingTOMonths().$1.price ?? 0;
+                        print("price from backend == $price");
+                        print("discountPrice == $discountPrice");
+
                         bool packageFound = false;
                         for (var package in purchaseApiController.packages) {
                           String identifier = package.storeProduct.identifier;
                           String price =
                               package.storeProduct.price.toStringAsFixed(2);
+                          print("price == $price");
 
                           if (discountPrice == double.parse(price)) {
                             switch (identifier) {
@@ -548,13 +562,13 @@ class _RegularPricePageState extends State<RegularPricePage> {
                                     .purchasePackage(package: package);
 
                                 if (success) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Purchase successful!'),
-                                    ),
+                                  customSnackbar(
+                                    title: "Success",
+                                    backgroundColor: AppColors.green,
+                                    message: "Purchase successful!",
                                   );
                                 }
-                                break; // Exit switch after finding the matching package identifier
+                                break;
                               default:
                                 log("Identifier not in the specified list: $identifier");
                                 break;
@@ -563,14 +577,14 @@ class _RegularPricePageState extends State<RegularPricePage> {
                         }
 
                         if (!packageFound) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                  'No matching package found for the discount price.'),
-                              backgroundColor: Colors.red,
-                            ),
+                          customSnackbar(
+                            title: "Error",
+                            backgroundColor: AppColors.red,
+                            message:
+                                "No matching package found for the discount price.",
                           );
                         }
+                        purchaseApiController.isLoading.value = false;
                       },
                       child: Text(
                         "Take a trial",

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:weight_loss_app/common/app_colors.dart';
+import 'package:weight_loss_app/widgets/custom_snackbar.dart';
 
 class PurchaseApiController extends GetxController {
   RxBool isLoading = true.obs;
@@ -81,14 +83,10 @@ class PurchaseApiController extends GetxController {
       if (e is PlatformException) {
         log('Purchase failed: ${e.message}, code: ${e.code}, details: ${e.details}');
 
-        ScaffoldMessenger.of(Get.context!).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Purchase failed: ${e.message}. Please try again later.',
-              style: const TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.red,
-          ),
+        customSnackbar(
+          title: "Error",
+          backgroundColor: AppColors.red,
+          message: 'Purchase failed: ${e.message}. Please try again later.',
         );
 
         switch (e.code) {
@@ -120,31 +118,7 @@ class PurchaseApiController extends GetxController {
       if (entitlements.isEmpty) {
         isPurchased.value = false;
       } else {
-        ///
-        ///
-        ///
-        // wl_monthly_plan
-        // wl_3month_plan
-        // wl_6month_plan
-        // wl_yearly_plan
-        // wl_6month_plan_with_trial
-        // wl_monthly_plan_with_trial
-        // wl_yearly_plan_with_trial
-        // wl_3month_plan_with_trial
-        ///
-        ///
-        ///
-        ///
-        for (var entitlement in entitlements) {
-          if (entitlement.productIdentifier == "wl_weekly_0.99" ||
-              entitlement.productIdentifier == "wl_weekly_2.99" ||
-              entitlement.productIdentifier == "wl_weekly_4.99" ||
-              entitlement.productIdentifier == "wl_weekly_6.99") {
-            isPurchased.value = true;
-          } else {
-            // isOtherPurchased.value = true;
-          }
-        }
+        isPurchased.value = true;
       }
 
       if (isPurchased.value) {

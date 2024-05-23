@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -8,19 +9,19 @@ import 'package:weight_loss_app/common/app_assets.dart';
 import 'package:weight_loss_app/common/app_colors.dart';
 import 'package:weight_loss_app/common/app_text_styles.dart';
 import 'package:weight_loss_app/common/app_texts.dart';
+import 'package:weight_loss_app/controllers/purchase_api_controller.dart';
 import 'package:weight_loss_app/modules/payment_integration/monthly_plan/controller/monthly_plan_controller.dart';
 import 'package:weight_loss_app/modules/payment_integration/payment_plans/models/payment_plans_model.dart';
+import 'package:weight_loss_app/widgets/custom_snackbar.dart';
 import 'package:weight_loss_app/widgets/overlay_widget.dart';
 
 class MonthlyPlanPage extends GetView<MonthlyPlanController> {
   const MonthlyPlanPage({
     super.key,
     required this.monthlyPackage,
-    required this.productId,
     required this.isMonthly,
   });
   final PackagesList monthlyPackage;
-  final String productId;
   final bool isMonthly;
   @override
   Widget build(BuildContext context) {
@@ -258,9 +259,170 @@ class MonthlyPlanPage extends GetView<MonthlyPlanController> {
                         onTap: controller.isLoading.value
                             ? () {}
                             : () async {
-                                // await controller
-                                //     .buyNonConsumableProduct(productId);
+                                PurchaseApiController purchaseApiController =
+                                    Get.put(PurchaseApiController());
+                                purchaseApiController.isLoading.value = true;
+
+                                if (isMonthly) {
+                                  for (var package
+                                      in purchaseApiController.packages) {
+                                    String identifier =
+                                        package.storeProduct.identifier;
+                                    if (identifier == "wl_monthly_plan") {
+                                      bool success = await purchaseApiController
+                                          .purchasePackage(package: package);
+
+                                      if (success) {
+                                        customSnackbar(
+                                          backgroundColor: AppColors.green,
+                                          message: "Purchase successful!",
+                                        );
+                                      } else {
+                                        purchaseApiController.isLoading.value =
+                                            false;
+                                      }
+                                    }
+                                  }
+                                  purchaseApiController.isLoading.value = false;
+                                } else {
+                                  ///
+                                  ///
+                                  ///
+                                  ///
+                                  double discountPrice =
+                                      monthlyPackage.discountPrice ?? 0;
+                                  bool packageFound = false;
+                                  print("discountPrice === $discountPrice");
+
+                                  for (var package
+                                      in purchaseApiController.packages) {
+                                    String identifier =
+                                        package.storeProduct.identifier;
+                                    String price = package.storeProduct.price
+                                        .toStringAsFixed(2);
+                                    print("price === $price");
+
+                                    if (discountPrice == double.parse(price)) {
+                                      switch (identifier) {
+                                        case "wl_monthly_plan":
+                                        case "wl_3month_plan":
+                                        case "wl_6month_plan":
+                                        case "wl_yearly_plan":
+                                          print("price === $price");
+                                          print("package == $package");
+
+                                          packageFound = true;
+                                          bool success =
+                                              await purchaseApiController
+                                                  .purchasePackage(
+                                                      package: package);
+
+                                          if (success) {
+                                            customSnackbar(
+                                              backgroundColor: AppColors.green,
+                                              message: "Purchase successful!",
+                                            );
+                                          } else {
+                                            purchaseApiController
+                                                .isLoading.value = false;
+                                          }
+                                          break;
+                                        default:
+                                          log("Identifier not in the specified list: $identifier");
+                                          break;
+                                      }
+                                    }
+                                    purchaseApiController.isLoading.value =
+                                        false;
+                                  }
+
+                                  if (!packageFound) {
+                                    customSnackbar(
+                                      backgroundColor: AppColors.red,
+                                      message:
+                                          "No matching package found for the discount price.",
+                                    );
+                                  }
+                                }
+                                purchaseApiController.isLoading.value = false;
                               },
+
+                        // {
+                        //     PurchaseApiController purchaseApiController =
+                        //         Get.put(PurchaseApiController());
+                        //     if (isMonthly) {
+                        //       for (var package
+                        //           in purchaseApiController.packages) {
+                        //         String identifier =
+                        //             package.storeProduct.identifier;
+                        //         if (identifier == "wl_monthly_plan") {
+                        //           bool success = await purchaseApiController
+                        //               .purchasePackage(package: package);
+
+                        //           ///
+                        //           if (success) {
+                        //             customSnackbar(
+                        //               backgroundColor: AppColors.green,
+                        //               message: "Purchase successful!",
+                        //             );
+                        //           }
+                        //         }
+                        //       }
+                        //     }
+
+                        //     ///
+
+                        //     else {
+                        //       double discountPrice =
+                        //           monthlyPackage.discountPrice ?? 0;
+
+                        //       ///
+                        //       bool packageFound = false;
+                        //       for (var package
+                        //           in purchaseApiController.packages) {
+                        //         String identifier =
+                        //             package.storeProduct.identifier;
+                        //         String price = package.storeProduct.price
+                        //             .toStringAsFixed(2);
+
+                        //         if (discountPrice == double.parse(price)) {
+                        //           switch (identifier) {
+                        //             case "wl_monthly_plan":
+                        //             case "wl_3month_plan":
+                        //             case "wl_6month_plan":
+                        //             case "wl_yearly_plan":
+                        //               print("price === $price");
+                        //               print("package == $package");
+
+                        //               packageFound = true;
+                        //               bool success =
+                        //                   await purchaseApiController
+                        //                       .purchasePackage(
+                        //                           package: package);
+
+                        //               if (success) {
+                        //                 customSnackbar(
+                        //                   backgroundColor: AppColors.green,
+                        //                   message: "Purchase successful!",
+                        //                 );
+                        //               }
+                        //               break;
+                        //             default:
+                        //               log("Identifier not in the specified list: $identifier");
+                        //               break;
+                        //           }
+                        //         }
+                        //       }
+
+                        //       if (!packageFound) {
+                        //         customSnackbar(
+                        //           backgroundColor: AppColors.red,
+                        //           message:
+                        //               "No matching package found for the discount price.",
+                        //         );
+                        //       }
+                        //     }
+                        //   },
                         borderRadius: BorderRadius.circular(5),
                         child: Container(
                           height: height * 0.07,

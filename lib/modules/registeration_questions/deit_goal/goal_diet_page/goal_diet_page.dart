@@ -25,7 +25,10 @@ class GoalDietPage extends GetView<GoalDietController> {
     double width = size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(),
+      appBar: AppBar(
+        
+        
+      ),
       body: InternetCheckWidget<ConnectivityService>(
         child: Obx(
           () => Stack(

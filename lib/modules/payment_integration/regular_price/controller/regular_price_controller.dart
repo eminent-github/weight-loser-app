@@ -106,8 +106,14 @@ class RegularPriceController extends GetxController {
             weightUnit: weightUnit.value)
         .difference(DateTime.now())
         .inDays;
+    print("days == $days");
 
-    if (days <= 90) {
+    if (days <= 31) {
+      return (
+        getPaymentPlans.singleWhere((element) => element.id == 1),
+        "wl_monthly_plan_with_trial"
+      );
+    } else if (days <= 90) {
       return (
         getPaymentPlans.singleWhere((element) => element.id == 5),
         "wl_3month_plan"
