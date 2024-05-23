@@ -1,9 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
-import 'package:flutter/material.dart';
 import 'package:weight_loss_app/common/app_texts.dart';
 import 'package:weight_loss_app/utils/internet_check_widget.dart';
 import 'package:weight_loss_app/widgets/overlay_widget.dart';
@@ -74,6 +73,7 @@ class SignUpPage extends GetView<SignUpController> {
                               controller.nameTextEditingController.value,
                           labelText: AppTexts.textFieldYourName,
                           textInputAction: TextInputAction.next,
+                          inputFormatters: [CapitalizeAllWordsFormatter()],
                         ),
                         SizedBox(
                           height: height * 0.025,

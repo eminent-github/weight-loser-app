@@ -107,3 +107,49 @@ class CustomTextFormField extends StatelessWidget {
     );
   }
 }
+
+// class CapitalizeFirstWordFormatter extends TextInputFormatter {
+//   @override
+//   TextEditingValue formatEditUpdate(
+//       TextEditingValue oldValue, TextEditingValue newValue) {
+//     if (newValue.text.isNotEmpty && newValue.text.length == 1) {
+//       // Capitalize the first character if it is the first character of the input
+//       return newValue.copyWith(
+//         text: newValue.text[0].toUpperCase(),
+//         selection: newValue.selection,
+//       );
+//     } else if (newValue.text.isNotEmpty) {
+//       // Capitalize the first word
+//       List<String> words = newValue.text.split(' ');
+//       if (words.isNotEmpty && words[0].isNotEmpty) {
+//         words[0] = words[0][0].toUpperCase() + words[0].substring(1);
+//         return newValue.copyWith(
+//           text: words.join(' '),
+//           selection: newValue.selection,
+//         );
+//       }
+//     }
+//     return newValue;
+//   }
+// }
+
+class CapitalizeAllWordsFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.text.isNotEmpty) {
+      String capitalizedText = newValue.text.split(' ').map((word) {
+        if (word.isNotEmpty) {
+          return word[0].toUpperCase() + word.substring(1);
+        }
+        return word;
+      }).join(' ');
+
+      return newValue.copyWith(
+        text: capitalizedText,
+        selection: newValue.selection,
+      );
+    }
+    return newValue;
+  }
+}
