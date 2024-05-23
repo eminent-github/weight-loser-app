@@ -125,17 +125,8 @@ class RegularPriceController extends GetxController {
     }
   }
 
-  String getCustomOfferNameByPrice({required String price}) {
-    if (price == "\$0.99") {
-      return "\$0.99";
-    } else if (price == "\$2.99") {
-      return "\$2.99";
-    } else if (price == "\$4.99") {
-      return "\$4.99";
-    } else if (price == "\$6.99") {
-      return "\$6.99";
-    } else {
-      return "";
-    }
-  }
+  ///
+  ///
+  ///
+  ///
 }

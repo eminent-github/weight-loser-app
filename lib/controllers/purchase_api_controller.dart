@@ -1,119 +1,3 @@
-// import 'dart:developer';
-// import 'dart:io';
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:get/get.dart';
-// import 'package:purchases_flutter/purchases_flutter.dart';
-
-// class PurchaseApiController extends GetxController {
-//   RxBool isLoading = true.obs;
-//   List<Package> packages = [];
-//   RxBool isWeeklyPurchased = false.obs;
-//   RxBool isOtherPurchased = false.obs;
-
-//   @override
-//   void onInit() async {
-//     init();
-//     super.onInit();
-//   }
-
-//   Future init() async {
-//     await Purchases.setDebugLogsEnabled(true);
-//     await Purchases.setup(
-//       Platform.isIOS ? "appl_xAjGWuzZEokaVJLEdUtSQUTihyW" : "",
-//     );
-//     Purchases.addCustomerInfoUpdateListener((purchaserInfo) async {
-//       updatePurchaseStatus();
-//     });
-//     await fetchOffersNew();
-//   }
-
-//   static Future<List<Offering>> fetchOffers({bool all = true}) async {
-//     try {
-//       final offerings = await Purchases.getOfferings();
-//       if (!all) {
-//         final current = offerings.current;
-//         return current == null ? [] : [current];
-//       } else {
-//         return offerings.all.values.toList();
-//       }
-//     } on PlatformException {
-//       return [];
-//     }
-//   }
-
-//   static Future<bool> purchasePackage(Package package) async {
-//     try {
-//       await Purchases.purchasePackage(package);
-//       return true;
-//     } catch (e) {
-//       return false;
-//     }
-//   }
-
-//   /* -------------------------------------------------------------------------- */
-//   /*                            revenuecat controller                           */
-//   /* -------------------------------------------------------------------------- */
-
-//   Future updatePurchaseStatus() async {
-//     final purchaserInfo = await Purchases.getCustomerInfo();
-//     final entitlements = purchaserInfo.entitlements.active.values.toList();
-
-//     if (entitlements.isEmpty) {
-//       isWeeklyPurchased.value = false;
-//       isOtherPurchased.value = false;
-//     } else {
-//       isWeeklyPurchased.value = true;
-//       // Get.offAll(() => SplashScreen());
-//     }
-//     log("purchaserInfo === $purchaserInfo");
-//     log("entitlements === $entitlements");
-
-//     if (isWeeklyPurchased.value) {
-//       log("user is premium with weekly plan");
-//     } else if (isOtherPurchased.value) {
-//       log("user is premium with other plan");
-//     } else {
-//       log("user is not premium");
-//     }
-
-//     update();
-//   }
-
-//   Future fetchOffersNew() async {
-//     isLoading.value = true;
-//     final offerings = await PurchaseApiController.fetchOffers(all: true);
-//     isLoading.value = false;
-
-//     ///
-//     ///
-//     ///
-//     if (offerings.isEmpty) {
-//       ScaffoldMessenger.of(Get.context!).showSnackBar(
-//         const SnackBar(
-//           content: Text('No Plans Found'),
-//         ),
-//       );
-//     } else {
-//       packages = offerings
-//           .map((offer) => offer.availablePackages)
-//           .expand((pair) => pair)
-//           .toList();
-//     }
-
-//     ///
-//     ///
-//     ///
-//     update();
-//   }
-// }
-
-///
-///
-///
-library;
-
 import 'dart:developer';
 import 'dart:io';
 
@@ -121,14 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:weight_loss_app/modules/talking_oath/talking_outh/binding/talking_oath_binding.dart';
-import 'package:weight_loss_app/modules/talking_oath/talking_outh/view/talking_oath_page.dart';
 
 class PurchaseApiController extends GetxController {
   RxBool isLoading = true.obs;
   List<Package> packages = [];
-  RxBool isWeeklyPurchased = false.obs;
-  RxBool isOtherPurchased = false.obs;
+  RxBool isPurchased = false.obs;
 
   @override
   void onInit() {
@@ -180,17 +61,17 @@ class PurchaseApiController extends GetxController {
   //   }
   // }
 
-  Future<bool> purchasePackage(Package package) async {
+  Future<bool> purchasePackage({required Package package}) async {
     try {
       await Purchases.purchasePackage(package);
       await init();
       await updatePurchaseStatus();
 
-      if (isWeeklyPurchased.value || isOtherPurchased.value) {
+      if (isPurchased.value) {
         log("User is premium");
         // Navigate to TalkingOathPage after successful purchase and status update
-        Get.offAll(() => const TalkingOathPage(),
-            binding: TalkingOathBinding());
+        // Get.offAll(() => const TalkingOathPage(),
+        //     binding: TalkingOathBinding());
       } else {
         log("User is not premium");
       }
@@ -237,25 +118,37 @@ class PurchaseApiController extends GetxController {
       // )}");
 
       if (entitlements.isEmpty) {
-        isWeeklyPurchased.value = false;
-        isOtherPurchased.value = false;
+        isPurchased.value = false;
       } else {
+        ///
+        ///
+        ///
+        // wl_monthly_plan
+        // wl_3month_plan
+        // wl_6month_plan
+        // wl_yearly_plan
+        // wl_6month_plan_with_trial
+        // wl_monthly_plan_with_trial
+        // wl_yearly_plan_with_trial
+        // wl_3month_plan_with_trial
+        ///
+        ///
+        ///
+        ///
         for (var entitlement in entitlements) {
           if (entitlement.productIdentifier == "wl_weekly_0.99" ||
               entitlement.productIdentifier == "wl_weekly_2.99" ||
               entitlement.productIdentifier == "wl_weekly_4.99" ||
               entitlement.productIdentifier == "wl_weekly_6.99") {
-            isWeeklyPurchased.value = true;
+            isPurchased.value = true;
           } else {
-            isOtherPurchased.value = true;
+            // isOtherPurchased.value = true;
           }
         }
       }
 
-      if (isWeeklyPurchased.value) {
+      if (isPurchased.value) {
         log("user is premium with weekly plan");
-      } else if (isOtherPurchased.value) {
-        log("user is premium with other plan");
       } else {
         log("user is not premium");
       }

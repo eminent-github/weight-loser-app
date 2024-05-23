@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -266,6 +266,11 @@ class _RegularPricePageState extends State<RegularPricePage> {
                                 SizedBox(
                                   height: height * 0.04,
                                 ),
+
+                                ///
+                                ///
+                                ///
+                                ///
                                 QusNextButton(
                                   height: height * 0.07,
                                   width: width * 0.5,
@@ -289,6 +294,11 @@ class _RegularPricePageState extends State<RegularPricePage> {
                                   },
                                   text: "Offer for you",
                                 ),
+
+                                ///
+                                ///
+                                ///
+                                ///
                               ],
                             ),
                           ),
@@ -512,16 +522,55 @@ class _RegularPricePageState extends State<RegularPricePage> {
                     /* -------------------------------------------------------------------------- */
                     ///
                     TextButton(
-                      onPressed: () {
-                        controller.isShowTrial.value = true;
-                        Future.delayed(const Duration(milliseconds: 100),
-                            () async {
-                          await scrollController.animateTo(
-                            scrollController.position.maxScrollExtent,
-                            duration: const Duration(seconds: 1),
-                            curve: Curves.easeInOut,
+                      onPressed: () async {
+                        double discountPrice = controller
+                                .planAccordingTOMonths()
+                                .$1
+                                .discountPrice ??
+                            0;
+                        bool packageFound = false;
+                        for (var package in purchaseApiController.packages) {
+                          String identifier = package.storeProduct.identifier;
+                          String price =
+                              package.storeProduct.price.toStringAsFixed(2);
+
+                          if (discountPrice == double.parse(price)) {
+                            switch (identifier) {
+                              case "wl_monthly_plan_with_trial":
+                              case "wl_3month_plan_with_trial":
+                              case "wl_6month_plan_with_trial":
+                              case "wl_yearly_plan_with_trial":
+                                print("price === $price");
+                                print("package == $package");
+
+                                packageFound = true;
+                                bool success = await purchaseApiController
+                                    .purchasePackage(package: package);
+
+                                if (success) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Purchase successful!'),
+                                    ),
+                                  );
+                                }
+                                break; // Exit switch after finding the matching package identifier
+                              default:
+                                log("Identifier not in the specified list: $identifier");
+                                break;
+                            }
+                          }
+                        }
+
+                        if (!packageFound) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'No matching package found for the discount price.'),
+                              backgroundColor: Colors.red,
+                            ),
                           );
-                        });
+                        }
                       },
                       child: Text(
                         "Take a trial",
@@ -533,89 +582,119 @@ class _RegularPricePageState extends State<RegularPricePage> {
                       ),
                     ),
 
+                    ////
                     ///
                     ///
                     ///
-                    if (controller.isShowTrial.value)
-                      Column(
-                        children: [
-                          Text(
-                            'Choose a price for your weekly trial',
-                            style: AppTextStyles.formalTextStyle(
-                              color: AppColors.primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                    ///
+                    ///
+                    ///
+                    // TextButton(
+                    //   onPressed: () {
+                    //     controller.isShowTrial.value = true;
+                    //     Future.delayed(const Duration(milliseconds: 100),
+                    //         () async {
+                    //       await scrollController.animateTo(
+                    //         scrollController.position.maxScrollExtent,
+                    //         duration: const Duration(seconds: 1),
+                    //         curve: Curves.easeInOut,
+                    //       );
+                    //     });
+                    //   },
+                    //   child: Text(
+                    //     "Take a trial",
+                    //     style: AppTextStyles.formalTextStyle(
+                    //       color: AppColors.buttonColor,
+                    //       fontSize: 16,
+                    //       fontWeight: FontWeight.w700,
+                    //     ),
+                    //   ),
+                    // ),
 
-                          ///
-                          ///
-                          ///
-                          ///
-                          Wrap(
-                            children:
-                                purchaseApiController.packages.map((package) {
-                              // log("purchaseApiController.packages === ${purchaseApiController.packages}");
-                              // log("price === ${package.storeProduct.priceString}");
+                    ///
+                    ///
+                    ///
+                    // if (controller.isShowTrial.value)
+                    //   Column(
+                    //     children: [
+                    //       Text(
+                    //         'Choose a price for your weekly trial',
+                    //         style: AppTextStyles.formalTextStyle(
+                    //           color: AppColors.primaryColor,
+                    //           fontWeight: FontWeight.bold,
+                    //         ),
+                    //       ),
 
-                              if (package.packageType.name != "custom") {
-                                return const SizedBox.shrink();
-                              }
+                    //       ///
+                    //       ///
+                    //       ///
+                    //       ///
+                    //       Wrap(
+                    //         children:
+                    //             purchaseApiController.packages.map((package) {
+                    //           // log("identifier === $package");
+                    //           log("identifier === ${package.storeProduct.identifier}");
+                    //           // log("price === ${package.storeProduct.priceString}");
 
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    purchaseApiController.isLoading.value =
-                                        true;
+                    //           if (package.packageType.name != "custom") {
+                    //             return const SizedBox.shrink();
+                    //           }
 
-                                    print(
-                                        "price === ${package.storeProduct.priceString}");
+                    //           return Padding(
+                    //             padding: const EdgeInsets.all(8.0),
+                    //             child: GestureDetector(
+                    //               onTap: () async {
+                    //                 purchaseApiController.isLoading.value =
+                    //                     true;
 
-                                    await purchaseApiController
-                                        .purchasePackage(package);
+                    //                 print(
+                    //                     "price === ${package.storeProduct.priceString}");
 
-                                    ///
+                    //                 await purchaseApiController
+                    //                     .purchasePackage(package);
 
-                                    purchaseApiController.isLoading.value =
-                                        false;
-                                  },
-                                  child: SizedBox(
-                                    width: width * 0.19,
-                                    height: height * 0.09,
-                                    child: Material(
-                                      color: AppColors.buttonColor,
-                                      borderRadius: BorderRadius.circular(6),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text(
-                                            controller
-                                                .getCustomOfferNameByPrice(
-                                              price: package
-                                                  .storeProduct.priceString,
-                                            ),
-                                            style:
-                                                AppTextStyles.formalTextStyle(
-                                              color: AppColors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
+                    //                 ///
 
-                          SizedBox(height: height * 0.05),
+                    //                 purchaseApiController.isLoading.value =
+                    //                     false;
+                    //               },
+                    //               child: SizedBox(
+                    //                 width: width * 0.19,
+                    //                 height: height * 0.09,
+                    //                 child: Material(
+                    //                   color: AppColors.buttonColor,
+                    //                   borderRadius: BorderRadius.circular(6),
+                    //                   child: Padding(
+                    //                     padding: const EdgeInsets.all(8.0),
+                    //                     child: Center(
+                    //                       child: Text(
+                    //                         controller
+                    //                             .getCustomOfferNameByPrice(
+                    //                           price: package
+                    //                               .storeProduct.priceString,
+                    //                         ),
+                    //                         style:
+                    //                             AppTextStyles.formalTextStyle(
+                    //                           color: AppColors.white,
+                    //                           fontWeight: FontWeight.bold,
+                    //                         ),
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           );
+                    //         }).toList(),
+                    //       ),
 
-                          ///
-                          ///
-                          ///
-                        ],
-                      ),
+                    //       SizedBox(height: height * 0.05),
+
+                    //       ///
+                    //       ///
+                    //       ///
+                    //     ],
+                    //   ),
 
                     ///
                     ///

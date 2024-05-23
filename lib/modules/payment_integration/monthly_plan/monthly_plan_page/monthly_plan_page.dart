@@ -258,8 +258,8 @@ class MonthlyPlanPage extends GetView<MonthlyPlanController> {
                         onTap: controller.isLoading.value
                             ? () {}
                             : () async {
-                                await controller
-                                    .buyNonConsumableProduct(productId);
+                                // await controller
+                                //     .buyNonConsumableProduct(productId);
                               },
                         borderRadius: BorderRadius.circular(5),
                         child: Container(

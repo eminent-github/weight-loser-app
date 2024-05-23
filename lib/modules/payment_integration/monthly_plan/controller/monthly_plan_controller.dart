@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:weight_loss_app/common/api_urls.dart';
 import 'package:weight_loss_app/common/app_texts.dart';
 import 'package:weight_loss_app/modules/payment_integration/payment_page/model/payment_success_detail.dart';
@@ -26,16 +24,12 @@ class MonthlyPlanController extends GetxController {
     monthlyPackage = amonthlyPackage;
   }
 
-  final InAppPurchase iap = InAppPurchase.instance;
-
-  late StreamSubscription<List<PurchaseDetails>> _purchasesSubscription;
   var isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
     getTargetAndCurrentWeight();
-    initialize();
   }
 
   final ApiService apiService = ApiService();
@@ -68,12 +62,10 @@ class MonthlyPlanController extends GetxController {
 
         log("ageResponse --------------------------------\n$dateObj");
         isApiLoading.value = false;
-        Get.offAll(() => const TalkingOathPage(),
-            binding: TalkingOathBinding());
+        Get.to(() => const TalkingOathPage(), binding: TalkingOathBinding());
       } else {
         isApiLoading.value = false;
-        Get.offAll(() => const TalkingOathPage(),
-            binding: TalkingOathBinding());
+        Get.to(() => const TalkingOathPage(), binding: TalkingOathBinding());
       }
     } catch (e) {
       isApiLoading.value = false;
@@ -81,130 +73,32 @@ class MonthlyPlanController extends GetxController {
     }
   }
 
-  @override
-  void dispose() {
-    _purchasesSubscription.cancel();
-    super.dispose();
-  }
-
-  @override
-  void onClose() {
-    _purchasesSubscription.cancel();
-    super.onClose();
-  }
-
-  Future<void> initialize() async {
-    if (!(await iap.isAvailable())) return;
-
-    ///catch all purchase updates
-    _purchasesSubscription = InAppPurchase.instance.purchaseStream.listen(
-      (List<PurchaseDetails> purchaseDetailsList) {
-        log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^${purchaseDetailsList.length}");
-        handlePurchaseUpdates(purchaseDetailsList);
-      },
-      onDone: () {
-        log("%%%%%%%%%%%% Done");
-
-        _purchasesSubscription.cancel();
-      },
-      onError: (error) {
-        log("@@@@@@@@@@@@@@@@@@ error:$error");
-        _purchasesSubscription.resume();
-      },
-    );
-  }
-
-  void handlePurchaseUpdates(List<PurchaseDetails> purchaseDetailsList) async {
-    PurchaseDetails purchaseDetails = purchaseDetailsList.first;
-    var purchaseStatus = purchaseDetails.status;
-    log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^${purchaseDetailsList.length}");
-    switch (purchaseDetails.status) {
-      case PurchaseStatus.pending:
-        isLoading.value = true;
-        print(' purchase is in pending');
-
-      case PurchaseStatus.error:
-        print(' purchase error ');
-        isLoading.value = false;
-        break;
-      case PurchaseStatus.canceled:
-        isLoading.value = false;
-        print(' purchase cancel ');
-        break;
-      case PurchaseStatus.purchased:
-        isLoading.value = false;
-        print("_____________________${purchaseDetails.transactionDate}");
-        break;
-      case PurchaseStatus.restored:
-        isLoading.value = false;
-        print(' purchase restore ');
-        break;
-      default:
-        isLoading.value = false;
-        print(
-            'this is purchase status not purchased ${purchaseDetails.status}');
-    }
-
-    if (purchaseDetails.pendingCompletePurchase) {
-      await iap.completePurchase(purchaseDetails).then((value) {
-        if (purchaseStatus == PurchaseStatus.purchased) {
-          isLoading.value = false;
-          customSnackbar(
-            title: AppTexts.success,
-            message: "Payment Successful!",
-            icon: const Icon(
-              Icons.check_circle,
-              color: Colors.green,
-            ),
-          );
-          paymentPostApi(
-            PostPaymentModel(
-                packageId: monthlyPackage!.id!,
-                amount: monthlyPackage!.discountPrice ?? 0,
-                discount: monthlyPackage!.discountPercent ?? 0,
-                discountPrice: monthlyPackage!.discountPrice ?? 0,
-                totalAmount: monthlyPackage!.price!,
-                status: "paid",
-                duration: monthlyPackage!.duration ?? 0),
-            "Apple",
-          );
-        }
-      });
-    }
-  }
-
-  Future<void> buyNonConsumableProduct(String productId) async {
-    try {
-      Set<String> productIds = {productId};
-
-      final ProductDetailsResponse productDetailResponse =
-          await iap.queryProductDetails(productIds);
-
-      if (productDetailResponse.productDetails.isEmpty) {
-        // Product not found
-        return;
-      }
-
-      final PurchaseParam purchaseParam = PurchaseParam(
-          productDetails: productDetailResponse.productDetails.first);
-      log("(((((((((((((${purchaseParam.productDetails.price}");
-      await iap.buyNonConsumable(
-        purchaseParam: purchaseParam,
-      );
-    } catch (e) {
-      // Handle purchase error
-
-      print('Failed to buy plan: $e');
-    }
-  }
-
-  restorePurchases() async {
-    try {
-      await iap.restorePurchases();
-    } catch (error) {
-      //you can handle error if restore purchase fails
-    }
-  }
+  // if (purchaseDetails.pendingCompletePurchase) {
+  //     await iap.completePurchase(purchaseDetails).then((value) {
+  //       if (purchaseStatus == PurchaseStatus.purchased) {
+  //         isLoading.value = false;
+  //         customSnackbar(
+  //           title: AppTexts.success,
+  //           message: "Payment Successful!",
+  //           icon: const Icon(
+  //             Icons.check_circle,
+  //             color: Colors.green,
+  //           ),
+  //         );
+  //         paymentPostApi(
+  //           PostPaymentModel(
+  //               packageId: monthlyPackage!.id!,
+  //               amount: monthlyPackage!.discountPrice ?? 0,
+  //               discount: monthlyPackage!.discountPercent ?? 0,
+  //               discountPrice: monthlyPackage!.discountPrice ?? 0,
+  //               totalAmount: monthlyPackage!.price!,
+  //               status: "paid",
+  //               duration: monthlyPackage!.duration ?? 0),
+  //           "Apple",
+  //         );
+  //       }
+  //     });
+  //   }
 
   DateTime expectedDate(
       {required num targetWeight,
