@@ -14,7 +14,6 @@ import 'package:weight_loss_app/modules/payment_integration/monthly_plan/binding
 import 'package:weight_loss_app/modules/payment_integration/monthly_plan/monthly_plan_page/monthly_plan_page.dart';
 import 'package:weight_loss_app/modules/payment_integration/regular_price/controller/regular_price_controller.dart';
 import 'package:weight_loss_app/modules/registeration_questions/widgets/qus_next_button.dart';
-import 'package:weight_loss_app/utils/in_app_purchase_util.dart';
 import 'package:weight_loss_app/widgets/custom_snackbar.dart';
 import 'package:weight_loss_app/widgets/overlay_widget.dart';
 
@@ -530,8 +529,21 @@ class _RegularPricePageState extends State<RegularPricePage> {
                     TextButton(
                       child: const Text("test"),
                       onPressed: () async {
-                        InAppPurchaseUtils.instance
-                            .buyConsumableProduct("wl_monthly_plan_with_trial");
+                        print(
+                            "packageId == ${controller.planAccordingTOMonths().$1.id}");
+                        print(
+                            "amount == ${controller.planAccordingTOMonths().$1.discountPrice}");
+                        print(
+                            "discount == ${controller.planAccordingTOMonths().$1.discountPercent}");
+                        print(
+                            "discountPrice == ${controller.planAccordingTOMonths().$1.discountPrice}");
+                        print(
+                            "price == ${controller.planAccordingTOMonths().$1.price}");
+                        print(
+                            "duration == ${controller.planAccordingTOMonths().$1.duration}");
+
+                        // InAppPurchaseUtils.instance
+                        //     .buyConsumableProduct("wl_monthly_plan_with_trial");
                       },
                     ),
 
@@ -586,6 +598,20 @@ class _RegularPricePageState extends State<RegularPricePage> {
 
                                 if (success) {
                                   log("Purchase successful!");
+
+                                  ///
+                                  ///
+                                  ///
+                                  ///
+                                  await purchaseApiController
+                                      .confirmPaymentPostApi(
+                                    selectedPackage:
+                                        controller.planAccordingTOMonths().$1,
+                                  );
+
+                                  ///
+                                  ///
+                                  ///
                                   purchaseApiController.isLoading.value = true;
                                 } else {
                                   purchaseApiController.isLoading.value = true;

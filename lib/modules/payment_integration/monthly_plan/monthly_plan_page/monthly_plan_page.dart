@@ -25,6 +25,19 @@ class MonthlyPlanPage extends GetView<MonthlyPlanController> {
   final bool isMonthly;
   @override
   Widget build(BuildContext context) {
+    ///
+    ///
+    ///
+    print("packageId == ${monthlyPackage.id}");
+    print("amount == ${monthlyPackage.discountPrice}");
+    print("discount == ${monthlyPackage.discountPercent}");
+    print("discountPrice == ${monthlyPackage.discountPrice}");
+    print("price == ${monthlyPackage.price}");
+    print("duration == ${monthlyPackage.duration}");
+
+    ///
+    ///
+    ///
     PurchaseApiController purchaseApiController =
         Get.put(PurchaseApiController());
     var size = MediaQuery.sizeOf(context);
@@ -272,6 +285,19 @@ class MonthlyPlanPage extends GetView<MonthlyPlanController> {
 
                                 if (success) {
                                   log("Purchase successful!");
+
+                                  ///
+                                  ///
+                                  ///
+                                  ///
+                                  ///
+                                  await purchaseApiController
+                                      .confirmPaymentPostApi(
+                                          selectedPackage: monthlyPackage);
+                                  ////
+                                  ///
+                                  ///
+                                  ///
                                   purchaseApiController.isLoading.value = false;
                                 } else {
                                   purchaseApiController.isLoading.value = false;
@@ -311,6 +337,20 @@ class MonthlyPlanPage extends GetView<MonthlyPlanController> {
 
                                     if (success) {
                                       log("Purchase successful!");
+
+                                      ///
+                                      ///
+                                      ///
+                                      ///
+
+                                      await purchaseApiController
+                                          .confirmPaymentPostApi(
+                                              selectedPackage: monthlyPackage);
+
+                                      ///
+                                      ///
+                                      ///
+                                      ///
 
                                       purchaseApiController.isLoading.value =
                                           false;
@@ -372,8 +412,7 @@ class MonthlyPlanPage extends GetView<MonthlyPlanController> {
                 ),
               ),
             ),
-            controller.isApiLoading.value ||
-                    purchaseApiController.isLoading.value
+            purchaseApiController.isLoading.value
                 ? const OverlayWidget()
                 : const SizedBox.shrink()
           ],

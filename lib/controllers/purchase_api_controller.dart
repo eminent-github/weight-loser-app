@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -5,7 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:weight_loss_app/common/api_urls.dart';
 import 'package:weight_loss_app/common/app_colors.dart';
+import 'package:weight_loss_app/common/app_texts.dart';
+import 'package:weight_loss_app/modules/payment_integration/payment_page/model/payment_success_detail.dart';
+import 'package:weight_loss_app/modules/payment_integration/payment_plans/models/payment_plans_model.dart';
+import 'package:weight_loss_app/modules/talking_oath/talking_outh/binding/talking_oath_binding.dart';
+import 'package:weight_loss_app/modules/talking_oath/talking_outh/view/talking_oath_page.dart';
+import 'package:weight_loss_app/utils/api_service.dart';
+import 'package:weight_loss_app/utils/shared_prefrence.dart';
 import 'package:weight_loss_app/widgets/custom_snackbar.dart';
 
 class PurchaseApiController extends GetxController {
@@ -71,9 +80,6 @@ class PurchaseApiController extends GetxController {
 
       if (isPurchased.value) {
         log("User is premium");
-        // Navigate to TalkingOathPage after successful purchase and status update
-        // Get.offAll(() => const TalkingOathPage(),
-        //     binding: TalkingOathBinding());
       } else {
         log("User is not premium");
       }
@@ -153,4 +159,96 @@ class PurchaseApiController extends GetxController {
 
     update();
   }
+
+  ///
+  ///
+  ///
+  final ApiService apiService = ApiService();
+  var isApiLoading = false.obs;
+
+  Future<void> paymentPostApi(
+      PostPaymentModel postPaymentModel, String type) async {
+    Map<String, dynamic> bodyData = {
+      "packageId": postPaymentModel.packageId,
+      "amount": postPaymentModel.amount.toStringAsFixed(2),
+      "Discount": postPaymentModel.discount,
+      "DiscountPrice": postPaymentModel.discountPrice,
+      "TotalAmount": postPaymentModel.totalAmount,
+      "type": type,
+      "status": postPaymentModel.status, //trial,pending,paid
+      "duration": postPaymentModel.duration
+    };
+    try {
+      isApiLoading.value = true;
+      log("beforeResponse");
+      var response = await apiService.post(
+        ApiUrls.postPaymentEndPoint,
+        jsonEncode(bodyData),
+        authToken: await StorageServivce.getToken(),
+      );
+      log("afterrResponse");
+      log(response.statusCode.toString());
+      if (response.statusCode == 200) {
+        var dateObj = jsonDecode(response.body);
+
+        log("ageResponse --------------------------------\n$dateObj");
+        isApiLoading.value = false;
+        Get.to(() => const TalkingOathPage(), binding: TalkingOathBinding());
+      } else {
+        isApiLoading.value = false;
+        Get.to(() => const TalkingOathPage(), binding: TalkingOathBinding());
+      }
+    } catch (e) {
+      isApiLoading.value = false;
+      customSnackbar(title: AppTexts.error, message: "Api Exception");
+    }
+  }
+
+////
+  ///
+  ///
+  ///
+  // PackagesList? monthlyPackage;
+  // getPaymentData(PackagesList amonthlyPackage) {
+  //   monthlyPackage = amonthlyPackage;
+  // }
+
+  ///
+  ///
+  ///
+  ///
+  Future<void> confirmPaymentPostApi(
+      {required PackagesList selectedPackage}) async {
+    customSnackbar(
+      title: AppTexts.success,
+      message: "Payment Successful!",
+      icon: const Icon(
+        Icons.check_circle,
+        color: Colors.green,
+      ),
+    );
+    print("packageId == ${selectedPackage.id}");
+    print("amount == ${selectedPackage.discountPrice}");
+    print("discount == ${selectedPackage.discountPercent}");
+    print("discountPrice == ${selectedPackage.discountPrice}");
+    print("price == ${selectedPackage.price}");
+    print("duration == ${selectedPackage.duration}");
+    await paymentPostApi(
+      PostPaymentModel(
+        packageId: selectedPackage.id!,
+        amount: selectedPackage.discountPrice ?? 0,
+        discount: selectedPackage.discountPercent ?? 0,
+        discountPrice: selectedPackage.discountPrice ?? 0,
+        totalAmount: selectedPackage.price!,
+        status: "paid",
+        duration: selectedPackage.duration ?? 0,
+      ),
+      Platform.isIOS ? "Apple" : "Android",
+    );
+  }
+
+  ///
+  ///
+  ///
+  ///
 }
