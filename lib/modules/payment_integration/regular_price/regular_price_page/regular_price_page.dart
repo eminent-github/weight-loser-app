@@ -14,7 +14,9 @@ import 'package:weight_loss_app/modules/payment_integration/monthly_plan/binding
 import 'package:weight_loss_app/modules/payment_integration/monthly_plan/monthly_plan_page/monthly_plan_page.dart';
 import 'package:weight_loss_app/modules/payment_integration/regular_price/controller/regular_price_controller.dart';
 import 'package:weight_loss_app/modules/registeration_questions/widgets/qus_next_button.dart';
+import 'package:weight_loss_app/utils/in_app_purchase_util.dart';
 import 'package:weight_loss_app/widgets/custom_snackbar.dart';
+import 'package:weight_loss_app/widgets/overlay_widget.dart';
 
 class RegularPricePage extends StatefulWidget {
   const RegularPricePage({super.key, required this.isLogin});
@@ -526,6 +528,17 @@ class _RegularPricePageState extends State<RegularPricePage> {
                     /* -------------------------------------------------------------------------- */
                     ///
                     TextButton(
+                      child: const Text("test"),
+                      onPressed: () async {
+                        InAppPurchaseUtils.instance
+                            .buyConsumableProduct("wl_monthly_plan_with_trial");
+                      },
+                    ),
+
+                    ///
+                    ///
+                    ///
+                    TextButton(
                       onPressed: () async {
                         purchaseApiController.isLoading.value = true;
                         double discountPrice = controller
@@ -534,27 +547,37 @@ class _RegularPricePageState extends State<RegularPricePage> {
                                 .discountPrice ??
                             0;
 
-                        ///
-                        ///
                         double price =
                             controller.planAccordingTOMonths().$1.price ?? 0;
                         print("price from backend == $price");
                         print("discountPrice == $discountPrice");
 
                         bool packageFound = false;
+
                         for (var package in purchaseApiController.packages) {
                           String identifier = package.storeProduct.identifier;
-                          String price =
-                              package.storeProduct.price.toStringAsFixed(2);
-                          print("price == $price");
+                          double packagePrice = package.storeProduct.price;
+                          String priceString = packagePrice.toStringAsFixed(2);
 
-                          if (discountPrice == double.parse(price)) {
+                          var introductoryPrice =
+                              package.storeProduct.introductoryPrice;
+                          if (introductoryPrice != null &&
+                              introductoryPrice.price == 0.0) {
+                            print(
+                                "Introductory price found: ${introductoryPrice.priceString} for ${introductoryPrice.periodNumberOfUnits} ${introductoryPrice.periodUnit}");
+                          }
+
+                          print("identifier == $identifier");
+                          print("package price == $priceString");
+
+                          // Check if the price matches the discount price
+                          if (discountPrice == double.parse(priceString)) {
                             switch (identifier) {
                               case "wl_monthly_plan_with_trial":
                               case "wl_3month_plan_with_trial":
                               case "wl_6month_plan_with_trial":
                               case "wl_yearly_plan_with_trial":
-                                print("price === $price");
+                                print("price === $priceString");
                                 print("package == $package");
 
                                 packageFound = true;
@@ -562,11 +585,10 @@ class _RegularPricePageState extends State<RegularPricePage> {
                                     .purchasePackage(package: package);
 
                                 if (success) {
-                                  customSnackbar(
-                                    title: "Success",
-                                    backgroundColor: AppColors.green,
-                                    message: "Purchase successful!",
-                                  );
+                                  log("Purchase successful!");
+                                  purchaseApiController.isLoading.value = true;
+                                } else {
+                                  purchaseApiController.isLoading.value = true;
                                 }
                                 break;
                               default:
@@ -584,6 +606,7 @@ class _RegularPricePageState extends State<RegularPricePage> {
                                 "No matching package found for the discount price.",
                           );
                         }
+
                         purchaseApiController.isLoading.value = false;
                       },
                       child: Text(
@@ -721,15 +744,10 @@ class _RegularPricePageState extends State<RegularPricePage> {
 
             ///
             ///
-            ///
-            if (purchaseApiController.isLoading.value)
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                ),
-              )
+
+            purchaseApiController.isLoading.value
+                ? const OverlayWidget()
+                : const SizedBox.shrink()
           ],
         ),
       ),
