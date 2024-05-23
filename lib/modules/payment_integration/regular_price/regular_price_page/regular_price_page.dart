@@ -526,26 +526,26 @@ class _RegularPricePageState extends State<RegularPricePage> {
                     /*                                Take a trial                                */
                     /* -------------------------------------------------------------------------- */
                     ///
-                    TextButton(
-                      child: const Text("test"),
-                      onPressed: () async {
-                        print(
-                            "packageId == ${controller.planAccordingTOMonths().$1.id}");
-                        print(
-                            "amount == ${controller.planAccordingTOMonths().$1.discountPrice}");
-                        print(
-                            "discount == ${controller.planAccordingTOMonths().$1.discountPercent}");
-                        print(
-                            "discountPrice == ${controller.planAccordingTOMonths().$1.discountPrice}");
-                        print(
-                            "price == ${controller.planAccordingTOMonths().$1.price}");
-                        print(
-                            "duration == ${controller.planAccordingTOMonths().$1.duration}");
+                    // TextButton(
+                    //   child: const Text("test"),
+                    //   onPressed: () async {
+                    //     print(
+                    //         "packageId == ${controller.planAccordingTOMonths().$1.id}");
+                    //     print(
+                    //         "amount == ${controller.planAccordingTOMonths().$1.discountPrice}");
+                    //     print(
+                    //         "discount == ${controller.planAccordingTOMonths().$1.discountPercent}");
+                    //     print(
+                    //         "discountPrice == ${controller.planAccordingTOMonths().$1.discountPrice}");
+                    //     print(
+                    //         "price == ${controller.planAccordingTOMonths().$1.price}");
+                    //     print(
+                    //         "duration == ${controller.planAccordingTOMonths().$1.duration}");
 
-                        // InAppPurchaseUtils.instance
-                        //     .buyConsumableProduct("wl_monthly_plan_with_trial");
-                      },
-                    ),
+                    //     // InAppPurchaseUtils.instance
+                    //     //     .buyConsumableProduct("wl_monthly_plan_with_trial");
+                    //   },
+                    // ),
 
                     ///
                     ///
