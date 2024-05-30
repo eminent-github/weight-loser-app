@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -206,7 +207,7 @@ class ScannerPage extends StatelessWidget {
                                 ),
                               ),
                               Positioned(
-                                bottom: height * 0.08,
+                                bottom: height * 0.13,
                                 child: Material(
                                   shape: const CircleBorder(),
                                   color: AppColors.buttonColor,
