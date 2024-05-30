@@ -22,7 +22,17 @@ class ApiService {
   Future<http.Response> post(String endpoint, dynamic data,
       {String? authToken}) async {
     final headers = _mergeHeaders(authToken: authToken);
-    log("from api service class -----------$headers,and data is $data");
+
+    log(
+      "from api service class endpoint -----------$endpoint",
+    );
+
+    log(
+      "from api service class headers -----------$headers",
+    );
+    log(
+      "from api service class data -----------data is $data",
+    );
     final response = await http.post(
       Uri.parse('$baseUrl$endpoint'),
       headers: headers,
@@ -45,7 +55,17 @@ class ApiService {
   Future<http.Response> formDataPost(String endpoint, dynamic data,
       {String? authToken}) async {
     final headers = _mergeFormDataHeaders(authToken: authToken);
-    log("from api service class -----------$headers,and data is $data");
+
+    log(
+      "from api service class endpoint -----------$endpoint",
+    );
+
+    log(
+      "from api service class headers -----------$headers",
+    );
+    log(
+      "from api service class data -----------data is $data",
+    );
     final response = await http.post(
       Uri.parse('$baseUrl$endpoint'),
       headers: headers,
@@ -57,7 +77,16 @@ class ApiService {
   Future<http.Response> formDataPatch(String endpoint, dynamic data,
       {String? authToken}) async {
     final headers = _mergeFormDataHeaders(authToken: authToken);
-    log("from api service class -----------$headers,and data is $data");
+    log(
+      "from api service class endpoint -----------$endpoint",
+    );
+
+    log(
+      "from api service class headers -----------$headers",
+    );
+    log(
+      "from api service class data -----------data is $data",
+    );
     final response = await http.patch(
       Uri.parse('$baseUrl$endpoint'),
       headers: headers,
@@ -69,7 +98,16 @@ class ApiService {
   Future<http.Response> patch(String endpoint, dynamic data,
       {String? authToken}) async {
     final headers = _mergeHeaders(authToken: authToken);
-    log("from api service class -----------$headers,and data is $data");
+    log(
+      "from api service class endpoint -----------$endpoint",
+    );
+
+    log(
+      "from api service class headers -----------$headers",
+    );
+    log(
+      "from api service class data -----------data is $data",
+    );
     final response = await http.patch(
       Uri.parse('$baseUrl$endpoint'),
       headers: headers,
