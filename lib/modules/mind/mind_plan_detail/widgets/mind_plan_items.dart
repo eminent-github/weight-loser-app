@@ -9,6 +9,7 @@ import 'package:weight_loss_app/modules/mind/mind_plan_detail/models/mind_item_d
 import 'package:weight_loss_app/modules/mind/mind_timer/binding/mind_timing_binding.dart';
 import 'package:weight_loss_app/modules/mind/mind_timer/mind_timer_page/mind_timer_page.dart';
 import 'package:weight_loss_app/widgets/loading_image.dart';
+
 import '../../../../common/app_colors.dart';
 import '../../../../common/app_text_styles.dart';
 
@@ -47,9 +48,14 @@ class MindPlanItem extends StatelessWidget {
               print(mindItemDetailModel.imageFile);
               return GestureDetector(
                 onTap: () async {
-                  await Get.to(() => const AudioPlayerScreen(),
-                      binding: MindTimerBinding(
-                          mindItemDetailModel: mindItemDetailModel));
+                  if (!isCurrentDay) {
+                    print("do nothing");
+                  } else {
+                    await Get.to(() => const AudioPlayerScreen(),
+                        binding: MindTimerBinding(
+                            mindItemDetailModel: mindItemDetailModel));
+                  }
+
                   // await Navigator.push(
                   //     context,
                   //     MaterialPageRoute(

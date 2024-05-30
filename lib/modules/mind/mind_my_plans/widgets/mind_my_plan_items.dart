@@ -48,9 +48,10 @@ class MindMyPlanItems extends StatelessWidget {
                             ),
                             binding: MindPalnDetailBinding(),
                             arguments: PlanIdAndDuration(
-                                duration: activePlan.duration,
-                                planId: activePlan.planId,
-                                day: activePlan.day),
+                              duration: activePlan.duration,
+                              planId: activePlan.planId,
+                              day: activePlan.day,
+                            ),
                           );
                         }
                       : null,

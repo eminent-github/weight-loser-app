@@ -9,6 +9,7 @@ import 'package:weight_loss_app/common/api_urls.dart';
 import 'package:weight_loss_app/modules/mind/mind_timer/controller/mind_timer_controller.dart';
 import 'package:weight_loss_app/widgets/loading_image.dart';
 import 'package:weight_loss_app/widgets/overlay_widget.dart';
+
 import '../../../../common/app_assets.dart';
 import '../../../../common/app_colors.dart';
 import '../../../../common/app_text_styles.dart';
@@ -212,8 +213,8 @@ class AudioPlayerScreen extends GetView<MindTimerController> {
                                     children: [
                                       IconButton(
                                         onPressed: () {
-                                          controller.assetsAudioPlayer
-                                              .seekBy(const Duration(seconds: -10));
+                                          controller.assetsAudioPlayer.seekBy(
+                                              const Duration(seconds: -10));
                                         },
                                         icon: Icon(
                                           Icons.replay_10_rounded,
@@ -262,8 +263,8 @@ class AudioPlayerScreen extends GetView<MindTimerController> {
                                       ),
                                       IconButton(
                                         onPressed: () {
-                                          controller.assetsAudioPlayer
-                                              .seekBy(const Duration(seconds: 10));
+                                          controller.assetsAudioPlayer.seekBy(
+                                              const Duration(seconds: 10));
                                         },
                                         icon: Icon(
                                           Icons.forward_10_rounded,
