@@ -21,14 +21,14 @@ import 'package:weight_loss_app/modules/profile/view_profile/binding/view_profil
 import 'package:weight_loss_app/modules/profile/view_profile/view_profile_page/view_profile_page.dart';
 import 'package:weight_loss_app/modules/recipe/discover_recipe/binding/discover_binding.dart';
 import 'package:weight_loss_app/modules/recipe/discover_recipe/view/discover_page.dart';
+import 'package:weight_loss_app/modules/refund/binding/refund_binding.dart';
+import 'package:weight_loss_app/modules/refund/refund_page/refund_page.dart';
 // import 'package:weight_loss_app/modules/refund/binding/refund_binding.dart';
 // import 'package:weight_loss_app/modules/refund/refund_page/refund_page.dart';
 // import 'package:weight_loss_app/modules/recipe/recipe_page/binding/recipe_binding.dart';
 // import 'package:weight_loss_app/modules/recipe/recipe_page/view/recipe_page.dart';
 import 'package:weight_loss_app/modules/setting/app_setting/binding/setting_binding.dart';
 import 'package:weight_loss_app/modules/setting/app_setting/setting_page/setting_page.dart';
-import 'package:weight_loss_app/modules/technical_support_chat/binding/technical_support_binding.dart';
-import 'package:weight_loss_app/modules/technical_support_chat/view/technical_support_page.dart';
 import 'package:weight_loss_app/modules/terms_conditions/binding/terms_condition_binding.dart';
 import 'package:weight_loss_app/modules/terms_conditions/terms_condition_page/terms_condition_page.dart';
 import 'package:weight_loss_app/modules/ultimate_selfie/binding/ultimate_selfie_binding.dart';
@@ -37,6 +37,7 @@ import 'package:weight_loss_app/modules/water/binding/water_binding.dart';
 import 'package:weight_loss_app/modules/water/view/water_page.dart';
 import 'package:weight_loss_app/modules/wl_communities/wl_community/binding/wl_community_binding.dart';
 import 'package:weight_loss_app/modules/wl_communities/wl_community/view/wl_community_page.dart';
+
 import '../../../../../common/app_assets.dart';
 import '../../../../../common/app_colors.dart';
 import '../../../../../common/app_text_styles.dart';
@@ -194,12 +195,12 @@ class DrawerPage extends GetView<MyDrawerController> {
                   children: [
                     CustomContainerShadow(
                       onPressed: () {
-                        Get.to(
-                          () => const TechnicalSupportChatPage(),
-                          binding: TechnicalSupportBinding(isFromLogin: false),
-                        );
-                        // Get.to(() => const RefundPage(),
-                        //     binding: RefundBinding());
+                        // Get.to(
+                        //   () => const TechnicalSupportChatPage(),
+                        //   binding: TechnicalSupportBinding(isFromLogin: false),
+                        // );
+                        Get.to(() => const RefundPage(),
+                            binding: RefundBinding());
                       },
                       iconPath: AppAssets.support,
                       textC: AppTexts.drawerContainerSupportText,

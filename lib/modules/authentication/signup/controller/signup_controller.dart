@@ -71,7 +71,9 @@ class SignUpController extends GetxController {
             r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
         .hasMatch(emailTextEditingController.value.text)) {
       customSnackbar(title: AppTexts.alert, message: AppTexts.emailFormat);
-    } else if (emailTextEditingController.value.text.endsWith("yopmail.com") ||
+    } else if (
+        // emailTextEditingController.value.text.endsWith("yopmail.com") ||
+
         emailTextEditingController.value.text.endsWith("mailinator.com")) {
       customSnackbar(
           title: AppTexts.alert,
