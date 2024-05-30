@@ -197,6 +197,10 @@ class LoginController extends GetxController {
                         ? 0
                         : result.userDto!.targetWeight!.toInt());
                 isLoading.value = false;
+                Get.off(
+                  () => const EatingHabitsPage(),
+                  binding: EatingHabitsBinding(),
+                );
 
                 if (questionHistoryModel.pageName != null) {
                   GetQuestionWithAnswerModel getQuestionWithAnswerModel =
@@ -310,89 +314,93 @@ class LoginController extends GetxController {
                 }
               } else {
                 await StorageServivce.saveToken(result.userTokens!.token!);
+                Get.off(
+                  () => const GenderPage(),
+                  binding: GenderBinding(),
+                );
 
-                if (questionHistoryModel.pageName != null) {
-                  await StorageServivce.saveCurrentWeight(
-                      (result.userDto!.weight ?? 0).toInt());
-                  await StorageServivce.saveGender(
-                      result.userDto!.gender == null
-                          ? ""
-                          : result.userDto!.gender!);
-                  await StorageServivce.saveGoalDate(
-                      result.userDto!.targetDate ?? DateTime.now().toString());
-                  await StorageServivce.saveWeightUnit(
-                      result.userDto!.weightUnit == null
-                          ? ""
-                          : result.userDto!.weightUnit!);
-                  await StorageServivce.saveTargetWeight(
-                      (result.userDto!.targetWeight ?? 0).toInt());
-                  GetQuestionWithAnswerModel getQuestionWithAnswerModel =
-                      await qusApi(questionHistoryModel.userQuestionOrder!,
-                          result.userTokens!.token!);
-                  isLoading.value = false;
-                  switch (questionHistoryModel.pageName) {
-                    case QuestionPageNames.activeDiagnosePageName:
-                      Get.off(
-                        () => ActiveDiagnosePage(
-                          getQuestionWithAnswerModel:
-                              getQuestionWithAnswerModel,
-                        ),
-                        binding: ActiveDiagnoseBinding(),
-                      );
-                    case QuestionPageNames.presentMedicalPageName:
-                      Get.off(
-                        () => const PresentMedicalPage(),
-                        binding: PresentMedicalBinding(),
-                        arguments: getQuestionWithAnswerModel,
-                      );
-                    case QuestionPageNames.genderPageName:
-                      Get.off(
-                        () => const GenderPage(),
-                        binding: GenderBinding(),
-                      );
-                    case QuestionPageNames.pregnantPageName:
-                      Get.off(
-                        () => const PregnantPage(),
-                        binding: PregnantBinding(),
-                      );
-                    case QuestionPageNames.agePageName:
-                      Get.off(
-                        () => const AgePage(),
-                        binding: AgeBinding(),
-                      );
-                    case QuestionPageNames.heightPageName:
-                      Get.off(
-                        () => const HeightPage(),
-                        binding: HeightBinding(),
-                      );
-                    case QuestionPageNames.weightPageName:
-                      Get.off(
-                        () => const HeightPage(),
-                        binding: HeightBinding(),
-                      );
-                    case QuestionPageNames.targetWeightPageName:
-                      Get.off(
-                        () => WeightPage(userHeight: result.userDto!.height),
-                        binding: WeightBinding(),
-                      );
-                    case QuestionPageNames.goalDietPageName:
-                      Get.off(
-                        () => const GoalDietPage(),
-                        binding: GoalDietBinding(),
-                      );
-                    default:
-                      Get.off(
-                        () => const GenderPage(),
-                        binding: GenderBinding(),
-                      );
-                  }
-                } else {
-                  isLoading.value = false;
-                  Get.off(
-                    () => const GenderPage(),
-                    binding: GenderBinding(),
-                  );
-                }
+                // if (questionHistoryModel.pageName != null) {
+                //   await StorageServivce.saveCurrentWeight(
+                //       (result.userDto!.weight ?? 0).toInt());
+                //   await StorageServivce.saveGender(
+                //       result.userDto!.gender == null
+                //           ? ""
+                //           : result.userDto!.gender!);
+                //   await StorageServivce.saveGoalDate(
+                //       result.userDto!.targetDate ?? DateTime.now().toString());
+                //   await StorageServivce.saveWeightUnit(
+                //       result.userDto!.weightUnit == null
+                //           ? ""
+                //           : result.userDto!.weightUnit!);
+                //   await StorageServivce.saveTargetWeight(
+                //       (result.userDto!.targetWeight ?? 0).toInt());
+                //   GetQuestionWithAnswerModel getQuestionWithAnswerModel =
+                //       await qusApi(questionHistoryModel.userQuestionOrder!,
+                //           result.userTokens!.token!);
+                //   isLoading.value = false;
+                //   switch (questionHistoryModel.pageName) {
+                //     case QuestionPageNames.activeDiagnosePageName:
+                //       Get.off(
+                //         () => ActiveDiagnosePage(
+                //           getQuestionWithAnswerModel:
+                //               getQuestionWithAnswerModel,
+                //         ),
+                //         binding: ActiveDiagnoseBinding(),
+                //       );
+                //     case QuestionPageNames.presentMedicalPageName:
+                //       Get.off(
+                //         () => const PresentMedicalPage(),
+                //         binding: PresentMedicalBinding(),
+                //         arguments: getQuestionWithAnswerModel,
+                //       );
+                //     case QuestionPageNames.genderPageName:
+                //       Get.off(
+                //         () => const GenderPage(),
+                //         binding: GenderBinding(),
+                //       );
+                //     case QuestionPageNames.pregnantPageName:
+                //       Get.off(
+                //         () => const PregnantPage(),
+                //         binding: PregnantBinding(),
+                //       );
+                //     case QuestionPageNames.agePageName:
+                //       Get.off(
+                //         () => const AgePage(),
+                //         binding: AgeBinding(),
+                //       );
+                //     case QuestionPageNames.heightPageName:
+                //       Get.off(
+                //         () => const HeightPage(),
+                //         binding: HeightBinding(),
+                //       );
+                //     case QuestionPageNames.weightPageName:
+                //       Get.off(
+                //         () => const HeightPage(),
+                //         binding: HeightBinding(),
+                //       );
+                //     case QuestionPageNames.targetWeightPageName:
+                //       Get.off(
+                //         () => WeightPage(userHeight: result.userDto!.height),
+                //         binding: WeightBinding(),
+                //       );
+                //     case QuestionPageNames.goalDietPageName:
+                //       Get.off(
+                //         () => const GoalDietPage(),
+                //         binding: GoalDietBinding(),
+                //       );
+                //     default:
+                //       Get.off(
+                //         () => const GenderPage(),
+                //         binding: GenderBinding(),
+                //       );
+                //   }
+                // } else {
+                //   isLoading.value = false;
+                //   Get.off(
+                //     () => const GenderPage(),
+                //     binding: GenderBinding(),
+                //   );
+                // }
               }
             } catch (e) {
               isLoading.value = false;

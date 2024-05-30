@@ -284,9 +284,6 @@ class _RegularPricePageState extends State<RegularPricePage> {
                                         monthlyPackage: controller
                                             .planAccordingTOMonths()
                                             .$1,
-                                        // productId: controller
-                                        //     .planAccordingTOMonths()
-                                        //     .$2,
                                         isMonthly: false,
                                       ),
                                       binding: MonthlyPlanBinding(
@@ -559,67 +556,94 @@ class _RegularPricePageState extends State<RegularPricePage> {
                                 .discountPrice ??
                             0;
 
-                        double price =
-                            controller.planAccordingTOMonths().$1.price ?? 0;
-                        print("price from backend == $price");
-                        print("discountPrice == $discountPrice");
-
                         bool packageFound = false;
 
                         for (var package in purchaseApiController.packages) {
                           String identifier = package.storeProduct.identifier;
-                          double packagePrice = package.storeProduct.price;
-                          String priceString = packagePrice.toStringAsFixed(2);
 
-                          var introductoryPrice =
-                              package.storeProduct.introductoryPrice;
-                          if (introductoryPrice != null &&
-                              introductoryPrice.price == 0.0) {
-                            print(
-                                "Introductory price found: ${introductoryPrice.priceString} for ${introductoryPrice.periodNumberOfUnits} ${introductoryPrice.periodUnit}");
+                          /* -------------------------------------------------------------------------- */
+                          /*                               monthly payment                              */
+                          /* -------------------------------------------------------------------------- */
+
+                          if (discountPrice.toString() == "19.99" &&
+                              identifier == "wl_monthly_plan_with_trial") {
+                            packageFound = true;
+                            bool success = await purchaseApiController
+                                .purchasePackage(package: package);
+
+                            if (success) {
+                              log("Purchase successful!");
+                              await purchaseApiController.confirmPaymentPostApi(
+                                selectedPackage:
+                                    controller.planAccordingTOMonths().$1,
+                              );
+                              purchaseApiController.isLoading.value = false;
+                            } else {
+                              purchaseApiController.isLoading.value = false;
+                            }
                           }
 
-                          print("identifier == $identifier");
-                          print("package price == $priceString");
+                          /* -------------------------------------------------------------------------- */
+                          /*                               1 to 3 month payment                         */
+                          /* -------------------------------------------------------------------------- */
 
-                          // Check if the price matches the discount price
-                          if (discountPrice == double.parse(priceString)) {
-                            switch (identifier) {
-                              case "wl_monthly_plan_with_trial":
-                              case "wl_3month_plan_with_trial":
-                              case "wl_6month_plan_with_trial":
-                              case "wl_yearly_plan_with_trial":
-                                print("price === $priceString");
-                                print("package == $package");
+                          else if (discountPrice.toString() == "39.99" &&
+                              identifier == "wl_3month_plan_with_trial") {
+                            bool success = await purchaseApiController
+                                .purchasePackage(package: package);
 
-                                packageFound = true;
-                                bool success = await purchaseApiController
-                                    .purchasePackage(package: package);
+                            if (success) {
+                              packageFound = true;
+                              log("Purchase successful!");
+                              await purchaseApiController.confirmPaymentPostApi(
+                                selectedPackage:
+                                    controller.planAccordingTOMonths().$1,
+                              );
+                              purchaseApiController.isLoading.value = false;
+                            } else {
+                              purchaseApiController.isLoading.value = false;
+                            }
+                          }
+                          /* -------------------------------------------------------------------------- */
+                          /*                               1 to 6 month payment                         */
+                          /* -------------------------------------------------------------------------- */
 
-                                if (success) {
-                                  log("Purchase successful!");
+                          else if (discountPrice.toString() == "99.99" &&
+                              identifier == "wl_6month_plan_with_trial") {
+                            packageFound = true;
+                            bool success = await purchaseApiController
+                                .purchasePackage(package: package);
 
-                                  ///
-                                  ///
-                                  ///
-                                  ///
-                                  await purchaseApiController
-                                      .confirmPaymentPostApi(
-                                    selectedPackage:
-                                        controller.planAccordingTOMonths().$1,
-                                  );
+                            if (success) {
+                              log("Purchase successful!");
+                              await purchaseApiController.confirmPaymentPostApi(
+                                selectedPackage:
+                                    controller.planAccordingTOMonths().$1,
+                              );
+                              purchaseApiController.isLoading.value = false;
+                            } else {
+                              purchaseApiController.isLoading.value = false;
+                            }
+                          }
+                          /* -------------------------------------------------------------------------- */
+                          /*                               1 year payment                         */
+                          /* -------------------------------------------------------------------------- */
 
-                                  ///
-                                  ///
-                                  ///
-                                  purchaseApiController.isLoading.value = true;
-                                } else {
-                                  purchaseApiController.isLoading.value = true;
-                                }
-                                break;
-                              default:
-                                log("Identifier not in the specified list: $identifier");
-                                break;
+                          else if (discountPrice.toString() == "119.99" &&
+                              identifier == "wl_yearly_plan_with_trial") {
+                            packageFound = true;
+                            bool success = await purchaseApiController
+                                .purchasePackage(package: package);
+
+                            if (success) {
+                              log("Purchase successful!");
+                              await purchaseApiController.confirmPaymentPostApi(
+                                selectedPackage:
+                                    controller.planAccordingTOMonths().$1,
+                              );
+                              purchaseApiController.isLoading.value = false;
+                            } else {
+                              purchaseApiController.isLoading.value = false;
                             }
                           }
                         }

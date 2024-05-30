@@ -305,74 +305,182 @@ class MonthlyPlanPage extends GetView<MonthlyPlanController> {
                               }
                             }
                           } else {
-                            ///
-                            ///
-                            ///
-                            ///
+                            purchaseApiController.isLoading.value = true;
                             double discountPrice =
                                 monthlyPackage.discountPrice ?? 0;
+
+                            print("discountPrice == $discountPrice");
+
                             bool packageFound = false;
-                            print("discountPrice === $discountPrice");
 
                             for (var package
                                 in purchaseApiController.packages) {
                               String identifier =
                                   package.storeProduct.identifier;
-                              String price =
-                                  package.storeProduct.price.toStringAsFixed(2);
-                              print("price === $price");
 
-                              if (discountPrice == double.parse(price)) {
-                                switch (identifier) {
-                                  case "wl_monthly_plan":
-                                  case "wl_3month_plan":
-                                  case "wl_6month_plan":
-                                  case "wl_yearly_plan":
-                                    print("price === $price");
-                                    print("package == $package");
+                              /* -------------------------------------------------------------------------- */
+                              /*                               monthly payment                              */
+                              /* -------------------------------------------------------------------------- */
 
-                                    packageFound = true;
-                                    bool success = await purchaseApiController
-                                        .purchasePackage(package: package);
+                              if (discountPrice.toString() == "19.99" &&
+                                  identifier == "wl_monthly_plan") {
+                                packageFound = true;
+                                bool success = await purchaseApiController
+                                    .purchasePackage(package: package);
 
-                                    if (success) {
-                                      log("Purchase successful!");
+                                if (success) {
+                                  log("Purchase successful!");
+                                  await purchaseApiController
+                                      .confirmPaymentPostApi(
+                                    selectedPackage: monthlyPackage,
+                                  );
+                                  purchaseApiController.isLoading.value = false;
+                                } else {
+                                  purchaseApiController.isLoading.value = false;
+                                }
+                              }
 
-                                      ///
-                                      ///
-                                      ///
-                                      ///
+                              /* -------------------------------------------------------------------------- */
+                              /*                               1 to 3 month payment                         */
+                              /* -------------------------------------------------------------------------- */
 
-                                      await purchaseApiController
-                                          .confirmPaymentPostApi(
-                                              selectedPackage: monthlyPackage);
+                              else if (discountPrice.toString() == "39.99" &&
+                                  identifier == "wl_3month_plan") {
+                                bool success = await purchaseApiController
+                                    .purchasePackage(package: package);
 
-                                      ///
-                                      ///
-                                      ///
-                                      ///
+                                if (success) {
+                                  packageFound = true;
+                                  log("Purchase successful!");
+                                  await purchaseApiController
+                                      .confirmPaymentPostApi(
+                                          selectedPackage: monthlyPackage);
+                                  purchaseApiController.isLoading.value = false;
+                                } else {
+                                  purchaseApiController.isLoading.value = false;
+                                }
+                              }
+                              /* -------------------------------------------------------------------------- */
+                              /*                               1 to 6 month payment                         */
+                              /* -------------------------------------------------------------------------- */
 
-                                      purchaseApiController.isLoading.value =
-                                          false;
-                                    } else {
-                                      purchaseApiController.isLoading.value =
-                                          false;
-                                    }
-                                    break;
-                                  default:
-                                    log("Identifier not in the specified list: $identifier");
-                                    break;
+                              else if (discountPrice.toString() == "99.99" &&
+                                  identifier == "wl_6month_plan") {
+                                packageFound = true;
+                                bool success = await purchaseApiController
+                                    .purchasePackage(package: package);
+
+                                if (success) {
+                                  log("Purchase successful!");
+                                  await purchaseApiController
+                                      .confirmPaymentPostApi(
+                                          selectedPackage: monthlyPackage);
+                                  purchaseApiController.isLoading.value = false;
+                                } else {
+                                  purchaseApiController.isLoading.value = false;
+                                }
+                              }
+                              /* -------------------------------------------------------------------------- */
+                              /*                               1 year payment                         */
+                              /* -------------------------------------------------------------------------- */
+
+                              else if (discountPrice.toString() == "119.99" &&
+                                  identifier == "wl_yearly_plan") {
+                                packageFound = true;
+                                bool success = await purchaseApiController
+                                    .purchasePackage(package: package);
+
+                                if (success) {
+                                  log("Purchase successful!");
+                                  await purchaseApiController
+                                      .confirmPaymentPostApi(
+                                          selectedPackage: monthlyPackage);
+                                  purchaseApiController.isLoading.value = false;
+                                } else {
+                                  purchaseApiController.isLoading.value = false;
                                 }
                               }
                             }
 
                             if (!packageFound) {
                               customSnackbar(
+                                title: "Error",
                                 backgroundColor: AppColors.red,
                                 message:
                                     "No matching package found for the discount price.",
                               );
                             }
+
+                            purchaseApiController.isLoading.value = false;
+
+                            // ///
+                            // ///
+                            // ///
+                            // ///
+                            // double discountPrice =
+                            //     monthlyPackage.discountPrice ?? 0;
+                            // bool packageFound = false;
+                            // print("discountPrice === $discountPrice");
+
+                            // for (var package
+                            //     in purchaseApiController.packages) {
+                            //   String identifier =
+                            //       package.storeProduct.identifier;
+                            //   String price =
+                            //       package.storeProduct.price.toStringAsFixed(2);
+                            //   print("price === $price");
+
+                            //   if (discountPrice == double.parse(price)) {
+                            //     switch (identifier) {
+                            //       case "wl_monthly_plan":
+                            //       case "wl_3month_plan":
+                            //       case "wl_6month_plan":
+                            //       case "wl_yearly_plan":
+                            //         print("price === $price");
+                            //         print("package == $package");
+
+                            //         packageFound = true;
+                            //         bool success = await purchaseApiController
+                            //             .purchasePackage(package: package);
+
+                            //         if (success) {
+                            //           log("Purchase successful!");
+
+                            //           ///
+                            //           ///
+                            //           ///
+                            //           ///
+
+                            //           await purchaseApiController
+                            //               .confirmPaymentPostApi(
+                            //                   selectedPackage: monthlyPackage);
+
+                            //           ///
+                            //           ///
+                            //           ///
+                            //           ///
+
+                            //           purchaseApiController.isLoading.value =
+                            //               false;
+                            //         } else {
+                            //           purchaseApiController.isLoading.value =
+                            //               false;
+                            //         }
+                            //         break;
+                            //       default:
+                            //         log("Identifier not in the specified list: $identifier");
+                            //         break;
+                            //     }
+                            //   }
+                            // }
+
+                            // if (!packageFound) {
+                            //   customSnackbar(
+                            //     backgroundColor: AppColors.red,
+                            //     message:
+                            //         "No matching package found for the discount price.",
+                            //   );
+                            // }
                           }
                         },
                         borderRadius: BorderRadius.circular(5),

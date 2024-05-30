@@ -52,6 +52,13 @@ class PurchaseApiController extends GetxController {
       return [];
     }
   }
+  ///
+  ///
+  ///
+  
+  ///
+  ///
+  ///
 
   // Future<bool> purchasePackage(Package package) async {
   //   try {

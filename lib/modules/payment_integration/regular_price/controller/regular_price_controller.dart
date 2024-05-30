@@ -49,6 +49,9 @@ class RegularPriceController extends GetxController {
     return ((numbeOfWeeks / 4.34524) * 30).round();
   }
 
+
+  
+
   final ApiService apiService = ApiService();
   var isLoading = false.obs;
 
