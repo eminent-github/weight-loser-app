@@ -8,6 +8,7 @@ import 'package:weight_loss_app/utils/internet_check_widget.dart';
 import 'package:weight_loss_app/widgets/custom_large_button.dart';
 import 'package:weight_loss_app/widgets/custom_snackbar.dart';
 import 'package:weight_loss_app/widgets/overlay_widget.dart';
+
 import '../../../../common/app_colors.dart';
 import '../../../../common/app_texts.dart';
 import '../../../../widgets/custom_datetime_calender.dart';
@@ -36,11 +37,13 @@ class WaterPage extends GetView<WaterController> {
             padding: EdgeInsets.only(right: width * 0.025),
             child: IconButton(
                 onPressed: () async {
+                  print(controller.userWaterDetailList.last.serving);
                   if (DateTime.now().isBefore(
                       DateTime.parse(controller.selectedDate.value)
                           .add(const Duration(days: 1)))) {
                     controller.editUserTodayWater(
-                      numberOfGlass: controller.numberOfGlasses.value,
+                      numberOfGlass:
+                          controller.userWaterDetailList.last.serving ?? 0,
                       dateTime: controller.selectedDate.value,
                     );
                   }
