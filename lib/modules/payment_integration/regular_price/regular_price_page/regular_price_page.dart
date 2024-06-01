@@ -669,6 +669,14 @@ class _RegularPricePageState extends State<RegularPricePage> {
                       ),
                     ),
 
+                    // TextButton(
+                    //   onPressed: () {
+                    //     Get.offAll(() => const TalkingOathPage(),
+                    //         binding: TalkingOathBinding());
+                    //   },
+                    //   child: const Text("bypass"),
+                    // ),
+
                     ////
                     ///
                     ///
