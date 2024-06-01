@@ -207,7 +207,7 @@ class ScannerPage extends StatelessWidget {
                                 ),
                               ),
                               Positioned(
-                                bottom: height * 0.13,
+                                bottom: height * 0.14,
                                 child: Material(
                                   shape: const CircleBorder(),
                                   color: AppColors.buttonColor,
