@@ -19,7 +19,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # for andriod
 # version: 1.0.10+10
 # for iso
-version: 1.0.1+3 
+version: 1.0.1+4
 # version: 1.0.1
 
 environment:
