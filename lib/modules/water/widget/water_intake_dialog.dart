@@ -67,7 +67,7 @@ class WaterIntakeDialog extends StatelessWidget {
                             const SizedBox(),
                         style: AppTextStyles.formalTextStyle(),
                         decoration: InputDecoration(
-                          hintText: "1",
+                          hintText: "0",
                           hintStyle: AppTextStyles.formalTextStyle(
                             color: AppColors.gray,
                           ),
