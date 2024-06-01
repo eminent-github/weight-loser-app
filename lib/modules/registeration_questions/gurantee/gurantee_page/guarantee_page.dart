@@ -165,7 +165,16 @@ class GuaranteePage extends GetView<GuaranteeController> {
                 ),
                 CustomLargeButton(
                   onPressed: () {
-                    Get.to(() =>  RegularPricePage(isLogin: true),
+                    /* -------------------------------------------------------------------------- */
+                    /*                                 for testing                                */
+                    /* -------------------------------------------------------------------------- */
+                    // Get.to(() => const TalkingOathPage(),
+                    //     binding: TalkingOathBinding());
+
+                    /* -------------------------------------------------------------------------- */
+                    /*                                  real data                                 */
+                    /* -------------------------------------------------------------------------- */
+                    Get.to(() => const RegularPricePage(isLogin: true),
                         binding: RegularPriceBinding());
                   },
                   text: "Let's Start",
