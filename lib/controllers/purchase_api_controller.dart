@@ -52,32 +52,10 @@ class PurchaseApiController extends GetxController {
       return [];
     }
   }
-  ///
-  ///
-  ///
-  
-  ///
-  ///
-  ///
 
-  // Future<bool> purchasePackage(Package package) async {
-  //   try {
-  //     await Purchases.purchasePackage(package);
-  //     await init();
-
-  //     if (isWeeklyPurchased.value || isOtherPurchased.value) {
-  //       log("user is premium");
-  //     } else {
-  //       log("user is not premium");
-  //     }
-
-  //     // Get.offAll(() => const TalkingOathPage(), binding: TalkingOathBinding());
-  //     return true;
-  //   } catch (e) {
-  //     log('Purchase failed: $e');
-  //     return false;
-  //   }
-  // }
+  ///
+  ///
+  ///
 
   Future<bool> purchasePackage({required Package package}) async {
     try {
@@ -124,9 +102,6 @@ class PurchaseApiController extends GetxController {
     try {
       final purchaserInfo = await Purchases.getCustomerInfo();
       final entitlements = purchaserInfo.entitlements.active.values.toList();
-      // print("entitle == ${entitlements.map(
-      //   (e) => e.identifier,
-      // )}");
 
       if (entitlements.isEmpty) {
         isPurchased.value = false;
@@ -210,15 +185,6 @@ class PurchaseApiController extends GetxController {
       customSnackbar(title: AppTexts.error, message: "Api Exception");
     }
   }
-
-////
-  ///
-  ///
-  ///
-  // PackagesList? monthlyPackage;
-  // getPaymentData(PackagesList amonthlyPackage) {
-  //   monthlyPackage = amonthlyPackage;
-  // }
 
   ///
   ///

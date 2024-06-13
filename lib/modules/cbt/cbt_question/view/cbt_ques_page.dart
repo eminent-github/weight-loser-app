@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
-import 'package:weight_loss_app/modules/cbt/cbt_question/model.dart/cbt_applause_widget.dart';
 import 'package:weight_loss_app/modules/cbt/cbt_question/controller/cbt_ques_controller.dart';
+import 'package:weight_loss_app/modules/cbt/cbt_question/model.dart/cbt_applause_widget.dart';
 import 'package:weight_loss_app/modules/cbt/model/cbt_questions_model.dart';
 import 'package:weight_loss_app/utils/internet_check_widget.dart';
 import 'package:weight_loss_app/widgets/custom_button_widget.dart';
@@ -227,7 +227,7 @@ class CbtQuestionPage extends GetView<CbtQuestionController> {
                                             width: 0.7,
                                           ),
                                         ),
-                                        fillColor: MaterialStatePropertyAll(
+                                        fillColor: WidgetStatePropertyAll(
                                             AppColors.buttonColor),
                                       ),
                                     ),

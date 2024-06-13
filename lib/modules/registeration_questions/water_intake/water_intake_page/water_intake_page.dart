@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:weight_loss_app/common/api_urls.dart';
 import 'package:weight_loss_app/utils/internet_check_widget.dart';
 import 'package:weight_loss_app/widgets/overlay_widget.dart';
+
 import '../../../../common/app_colors.dart';
 import '../../../../common/app_text_styles.dart';
 import '../../../../common/app_texts.dart';
@@ -231,7 +232,9 @@ class WaterIntakePage extends GetView<WaterIntakeController> {
                     ),
                   ],
                 ),
-                controller.isLoading.value ? const OverlayWidget() : const SizedBox(),
+                controller.isLoading.value
+                    ? const OverlayWidget()
+                    : const SizedBox(),
               ],
             ),
           ),

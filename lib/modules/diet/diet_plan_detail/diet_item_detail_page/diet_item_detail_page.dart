@@ -10,6 +10,7 @@ import 'package:weight_loss_app/common/app_texts.dart';
 import 'package:weight_loss_app/utils/internet_check_widget.dart';
 import 'package:weight_loss_app/widgets/loading_image.dart';
 import 'package:weight_loss_app/widgets/overlay_widget.dart';
+
 import '../controller/diet_plan_detail_controller.dart';
 import '../widget/food_item.dart';
 
@@ -127,10 +128,12 @@ class DietPlanDetailPage extends GetView<DietPlanDetailController> {
                       itemBuilder: (context, index) {
                         bool showLock = !isActivated.value && index >= 4;
                         bool isClickable = !showLock || index < 4;
-                        bool isActiveClickable =controller.planIdAndDuration.value.day!>7?
-                            index < controller.planIdAndDuration.value.day!:
-                       index<   controller.planIdAndDuration.value.day!+6
-                            ;
+                        bool isActiveClickable =
+                            controller.planIdAndDuration.value.day! > 7
+                                ? index <
+                                    controller.planIdAndDuration.value.day!
+                                : index <
+                                    controller.planIdAndDuration.value.day! + 6;
                         return Obx(
                           () => isActivated.value
                               ? GestureDetector(

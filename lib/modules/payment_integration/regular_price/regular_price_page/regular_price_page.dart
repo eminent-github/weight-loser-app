@@ -14,6 +14,8 @@ import 'package:weight_loss_app/modules/payment_integration/monthly_plan/binding
 import 'package:weight_loss_app/modules/payment_integration/monthly_plan/monthly_plan_page/monthly_plan_page.dart';
 import 'package:weight_loss_app/modules/payment_integration/regular_price/controller/regular_price_controller.dart';
 import 'package:weight_loss_app/modules/registeration_questions/widgets/qus_next_button.dart';
+import 'package:weight_loss_app/modules/talking_oath/talking_outh/binding/talking_oath_binding.dart';
+import 'package:weight_loss_app/modules/talking_oath/talking_outh/view/talking_oath_page.dart';
 import 'package:weight_loss_app/widgets/custom_snackbar.dart';
 import 'package:weight_loss_app/widgets/overlay_widget.dart';
 
@@ -669,13 +671,13 @@ class _RegularPricePageState extends State<RegularPricePage> {
                       ),
                     ),
 
-                    // TextButton(
-                    //   onPressed: () {
-                    //     Get.offAll(() => const TalkingOathPage(),
-                    //         binding: TalkingOathBinding());
-                    //   },
-                    //   child: const Text("bypass"),
-                    // ),
+                    TextButton(
+                      onPressed: () {
+                        Get.offAll(() => const TalkingOathPage(),
+                            binding: TalkingOathBinding());
+                      },
+                      child: const Text("bypass"),
+                    ),
 
                     ////
                     ///

@@ -29,6 +29,7 @@ class DietMyPlansController extends GetxController {
       );
       if (response.statusCode == 200) {
         var dataObj = jsonDecode(response.body);
+        log(dataObj.toString());
         isLoading.value = false;
         getDietActivePlans.value = DietActivePlans.fromJson(dataObj);
         log(getDietActivePlans.value.activePlan!.length.toString());
